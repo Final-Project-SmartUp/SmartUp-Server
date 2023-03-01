@@ -17,6 +17,38 @@ class CategoryController {
             response.status(500).json(err);
         }
     }
+
+    static async getCategoryById(request, response, next) {
+        try {
+            const { categoryId } = request.params;
+
+            const category = await Category.findOne({
+                where: {
+                    id: categoryId,
+                },
+            });
+
+            if (!category) {
+                throw { status: 404, message: "Category not found" };
+            }
+
+            response.status(200).json({
+                id: categoryId,
+                name: category.name,
+                value: category.value,
+            });
+        } catch (err) {
+            if (err.status) {
+                response.status(err.status).json({
+                    message: err.message,
+                });
+            } else {
+                response.status(500).json({
+                    message: "Internal server error",
+                });
+            }
+        }
+    }
 }
 
 module.exports = CategoryController;
