@@ -5,7 +5,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 
-
+let a = 0
 
 let counter = 0
 docRef.onSnapshot(async (doc) => {
