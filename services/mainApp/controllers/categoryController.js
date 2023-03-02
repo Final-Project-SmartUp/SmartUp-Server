@@ -12,9 +12,10 @@ class CategoryController {
                 };
                 return object;
             });
+            console.log(request.user, "INI PENTING");
             response.status(200).json(categories);
         } catch (err) {
-            next(err)
+            next(err);
         }
     }
 
@@ -38,7 +39,7 @@ class CategoryController {
                 value: category.value,
             });
         } catch (err) {
-            next(err)
+            next(err);
         }
     }
 }
