@@ -24,7 +24,7 @@ class QuestionController {
 
             response.status(200).json(result);
         } catch (err) {
-            response.status(500).json(err);
+            next(err)
         }
     }
 }

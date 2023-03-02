@@ -14,7 +14,7 @@ class CategoryController {
             });
             response.status(200).json(categories);
         } catch (err) {
-            response.status(500).json(err);
+            next(err)
         }
     }
 
@@ -38,15 +38,7 @@ class CategoryController {
                 value: category.value,
             });
         } catch (err) {
-            if (err.status) {
-                response.status(err.status).json({
-                    message: err.message,
-                });
-            } else {
-                response.status(500).json({
-                    message: "Internal server error",
-                });
-            }
+            next(err)
         }
     }
 }

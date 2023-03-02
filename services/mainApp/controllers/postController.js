@@ -19,13 +19,7 @@ class PostController {
 
             response.status(200).json(posts);
         } catch (err) {
-            if (err.status) {
-                response.status(err.status).json({
-                    message: err.message,
-                });
-            } else {
-                response.status(500).json(err);
-            }
+            next(err)
         }
     }
 
@@ -40,7 +34,7 @@ class PostController {
             });
             response.status(201).json(post);
         } catch (err) {
-            response.status(500).json(err);
+            next(err)
         }
     }
 
@@ -75,7 +69,7 @@ class PostController {
                 message: `Post with id ${postId} has been updated`,
             });
         } catch (err) {
-            response.status(500).json(err);
+            next (err)
         }
     }
 
@@ -102,9 +96,7 @@ class PostController {
                 message: `Post with id ${postId} has been deleted`,
             });
         } catch (err) {
-            response.status(500).json({
-                message: "Internal server error",
-            });
+           next(err)
         }
     }
 }

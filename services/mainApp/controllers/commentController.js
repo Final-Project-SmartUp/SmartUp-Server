@@ -11,9 +11,7 @@ class CommentController {
             });
             response.status(201).json(comment);
         } catch (err) {
-            response.status(500).json({
-                message: "Internal server error",
-            });
+            next (err)
         }
     }
 
@@ -47,9 +45,7 @@ class CommentController {
                 message: `Comment with id ${commentId} has been edited`,
             });
         } catch (err) {
-            response.status(500).json({
-                message: "Internal server error",
-            });
+            next(err)
         }
     }
 
@@ -76,9 +72,7 @@ class CommentController {
                 message: `Comment with id ${commentId} has been deleted`,
             });
         } catch (err) {
-            response.status(500).json({
-                message: "Internal server error",
-            });
+           next (err)
         }
     }
 }
