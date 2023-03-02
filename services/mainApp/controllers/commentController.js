@@ -52,6 +52,35 @@ class CommentController {
             });
         }
     }
+
+    static async deleteComment(request, response, next) {
+        try {
+            const { commentId } = request.params;
+            const comment = await Comment.findOne({
+                where: {
+                    id: commentId,
+                },
+            });
+
+            if (!comment) {
+                throw { status: 404, message: "Comment not found" };
+            }
+
+            await Comment.destroy({
+                where: {
+                    id: commentId,
+                },
+            });
+            
+            response.status(200).json({
+                message: `Comment with id ${commentId} has been deleted`,
+            });
+        } catch (err) {
+            response.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
 }
 
 module.exports = CommentController;
