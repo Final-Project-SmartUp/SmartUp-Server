@@ -16,6 +16,42 @@ class CommentController {
             });
         }
     }
+
+    static async editComment(request, response, next) {
+        try {
+            const { commentId } = request.params;
+            const { description } = request.body;
+
+            const comment = await Comment.findOne({
+                where: {
+                    id: commentId,
+                },
+            });
+
+            if (!comment) {
+                throw { status: 404, message: "Comment not found" };
+            }
+
+            await Comment.update(
+                {
+                    description,
+                },
+                {
+                    where: {
+                        id: commentId,
+                    },
+                }
+            );
+
+            response.status(200).json({
+                message: `Comment with id ${commentId} has been edited`,
+            });
+        } catch (err) {
+            response.status(500).json({
+                message: "Internal server error",
+            });
+        }
+    }
 }
 
 module.exports = CommentController;
