@@ -15,6 +15,7 @@ class CategoryController {
             console.log(request.user, "INI PENTING");
             response.status(200).json(categories);
         } catch (err) {
+            console.log(err);
             next(err);
         }
     }
