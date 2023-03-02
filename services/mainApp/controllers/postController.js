@@ -46,7 +46,7 @@ class PostController {
 
     static async editPost(request, response, next) {
         try {
-            console.log('asdsad')
+            console.log("asdsad");
             const { title, description } = request.body;
             const { postId } = request.params;
 
@@ -76,6 +76,35 @@ class PostController {
             });
         } catch (err) {
             response.status(500).json(err);
+        }
+    }
+
+    static async deletePost(request, response, next) {
+        try {
+            const { postId } = request.params;
+            const post = await Post.findOne({
+                where: {
+                    id: postId,
+                },
+            });
+
+            if (!post) {
+                throw { status: 404, message: "Post not found" };
+            }
+
+            await Post.destroy({
+                where: {
+                    id: postId,
+                },
+            });
+
+            response.status(200).json({
+                message: `Post with id ${postId} has been deleted`,
+            });
+        } catch (err) {
+            response.status(500).json({
+                message: "Internal server error",
+            });
         }
     }
 }
