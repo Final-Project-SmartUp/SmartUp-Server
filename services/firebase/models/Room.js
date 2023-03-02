@@ -1,17 +1,17 @@
 const db = require("../configConnection/firebaseconnection");
 const { hashPassword } = require("../helpers/bcrpyt");
 
-class User{
+class Room{
     static async findAll(){
         try {
-            const users = await db.collection("users")
-            const snapshot = await users.get();
+            const rooms = await db.collection("rooms").where("player2", "==", null)
+            const snapshot = await rooms.get();
             let responseArr = []
             snapshot.forEach(doc => {
-                let objUser = doc.data()
-                objUser.id = doc.id
-                delete objUser.password
-                responseArr.push(objUser)
+                let objRoom = doc.data()
+                objRoom.id = doc.id
+                delete objRoom.password
+                responseArr.push(objRoom)
               });
             return responseArr
         } catch (error) {
@@ -19,25 +19,9 @@ class User{
         }
     }
 
-    static async findByEmail(email){
-        try {
-            const users = await db.collection("users")
-            const snapshot = await users.where("email" , "==", email).get();
-            let responseArr = []
-            snapshot.forEach(doc => {
-                let objUser = doc.data()
-                objUser.id = doc.id 
-                responseArr.push(objUser)
-              });
-            return responseArr[0]
-        } catch (error) {
-           throw error
-        }
-    }
-
     static async findById(id){
         try {
-            const user = db.collection("users").doc(id)
+            const user = db.collection("rooms").doc(id)
             const doc = await user.get()
             if(!doc.data()){
                 throw({status:404,message:"Data not found"})
@@ -53,8 +37,7 @@ class User{
     }
     static async create(payload){
         try {
-             payload.password = hashPassword(payload.password)
-             return db.collection("users").add(payload)
+             return db.collection("rooms").add(payload)
         } catch (err) {
             throw err
         }
@@ -62,8 +45,17 @@ class User{
 
     static async update(id,payload){
         try {
-            const userRef = db.collection("users").doc(id)
+            const userRef = db.collection("rooms").doc(id)
             return userRef.update(payload);
+        } catch (err) {
+            throw err
+        }
+    }
+
+    static async delete(id){
+        try {
+             await db.collection('rooms').doc(id).delete()
+             return null
         } catch (err) {
             throw err
         }
@@ -72,4 +64,4 @@ class User{
 }
 
 
-module.exports = User
+module.exports = Room
