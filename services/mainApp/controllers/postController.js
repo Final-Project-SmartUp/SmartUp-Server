@@ -43,6 +43,41 @@ class PostController {
             response.status(500).json(err);
         }
     }
+
+    static async editPost(request, response, next) {
+        try {
+            console.log('asdsad')
+            const { title, description } = request.body;
+            const { postId } = request.params;
+
+            const post = await Post.findOne({
+                where: {
+                    id: postId,
+                },
+            });
+
+            if (!post) {
+                throw { status: 404, message: "Post not found" };
+            }
+
+            await Post.update(
+                {
+                    title,
+                    description,
+                },
+                {
+                    where: {
+                        id: postId,
+                    },
+                }
+            );
+            response.status(200).json({
+                message: `Post with id ${postId} has been updated`,
+            });
+        } catch (err) {
+            response.status(500).json(err);
+        }
+    }
 }
 
 module.exports = PostController;
