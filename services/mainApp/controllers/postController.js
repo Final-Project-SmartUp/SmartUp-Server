@@ -1,0 +1,35 @@
+const { Post, Comment } = require("../models");
+
+class PostController {
+    static async getAllPostByCategoryId(request, response, next) {
+        try {
+            const { categoryId } = request.params;
+            const posts = await Post.findAll({
+                where: {
+                    CategoryId: categoryId,
+                },
+                include: {
+                    model: Comment,
+                },
+            });
+
+            if (posts.length === 0) {
+                throw { status: 404, message: "Posts not found" };
+            }
+
+            response.status(200).json(posts);
+        } catch (err) {
+            if (err.status) {
+                response.status(err.status).json({
+                    message: err.message,
+                });
+            } else {
+                response.status(500).json(err);
+            }
+        }
+    }
+
+
+}
+
+module.exports = PostController;
