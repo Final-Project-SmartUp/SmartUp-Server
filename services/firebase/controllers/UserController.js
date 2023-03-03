@@ -73,7 +73,7 @@ class UserController {
             await User.update(user.id, {
                 online: true,
             })
-            res.status(200).json({ access_token })
+            res.status(200).json({ access_token, id:user.id, username:user.username })
         } catch (err) {
             if (err.status) {
                 res.status(err.status).json({ message: err.message })
