@@ -42,6 +42,7 @@ class UserController {
                 email,
             })
         } catch (err) {
+            console.log(err);
             res.status(500).json(err)
         }
     }

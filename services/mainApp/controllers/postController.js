@@ -40,7 +40,7 @@ class PostController {
 
     static async editPost(request, response, next) {
         try {
-            console.log("asdsad");
+            // console.log("asdsad");
             const { title, description } = request.body;
             const { postId } = request.params;
 
