@@ -16,6 +16,7 @@ describe("GET /categories", () => {
             .set('access_token', access_token)
             .then((response) => {
                 const { body, status } = response;
+                console.log(body, 'ini dia body si get categories');
                 expect(status).toBe(200);
                 expect(body[0]).toHaveProperty("id", expect.any(Number));
                 expect(body[0]).toHaveProperty("name", expect.any(String));
