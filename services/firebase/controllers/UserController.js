@@ -6,6 +6,7 @@ class UserController {
     static async getAllUsers(req, res) {
         try {
             const arrayDataofUsers = await User.findAll()
+         
             res.status(200).json(arrayDataofUsers)
         } catch (err) {
             res.status(500).json(err)
@@ -17,16 +18,28 @@ class UserController {
             const user = await User.findById(userId)
             res.status(200).json(user)
         } catch (err) {
-            if(err.status){
-                res.status(err.status).json({message:err.message})
-            }else{
-                res.status(500).json({message:"Internal server error"})
+            if (err.status) {
+                res.status(err.status).json({ message: err.message })
+            } else {
+                res.status(500).json({ message: "Internal server error" })
             }
         }
     }
     static async registerUser(req, res) {
         try {
             const { username, email, password } = req.body
+            if (!email, !password, !password) {
+                throw { message: "Email, username, and password are required" }
+            }
+            const emailChecked = await User.findByEmail(email)
+            if (emailChecked) {
+                throw { message: "Email already registered" }
+            }
+           
+            const usernameChecked = await User.findByUsername(username)
+            if (usernameChecked) {
+                throw { message: "Username already registered" }
+            }
             const newUser = await User.create({
                 username,
                 profileName: username,
@@ -35,17 +48,22 @@ class UserController {
                 online: false,
                 isPlaying: false,
             })
-
             res.status(201).json({
                 id: newUser._path.segments[1],
                 username,
                 email,
             })
         } catch (err) {
-            res.status(500).json(err)
+            if (err.message === "Username already registered" || err.message === "Email already registered") {
+                console.log(err)
+                res.status(400).json({ message: err.message })
+            }else if(err.message === "Email, username, and password are required"){
+                res.status(400).json({ message: err.message })
+            }else{
+                res.status(500).json(err)
+            }
         }
     }
-
     static async loginUser(req, res) {
         try {
             const { email, password } = req.body
@@ -72,7 +90,7 @@ class UserController {
             await User.update(user.id, {
                 online: true,
             })
-            res.status(200).json({ access_token, id:user.id, username:user.username })
+            res.status(200).json({ access_token, id: user.id, username: user.username })
         } catch (err) {
             if (err.status) {
                 res.status(err.status).json({ message: err.message })
@@ -87,8 +105,8 @@ class UserController {
             const { userId } = req.params
 
             const user = User.findById(userId)
-            if(!user){
-                
+            if (!user) {
+
             }
             await User.update(userId, {
                 isPlaying: true,
@@ -96,7 +114,7 @@ class UserController {
             res.status(200).json({ message: "Succed update" })
         } catch (error) {
             console.log(error)
-            res.status(500).json({message:"Internal server error"})
+            res.status(500).json({ message: "Internal server error" })
         }
     }
 }

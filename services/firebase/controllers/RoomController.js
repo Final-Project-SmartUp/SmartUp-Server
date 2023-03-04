@@ -31,6 +31,12 @@ class RoomController{
                 player2 : null,
                 isEnded : false
             })
+            res.status(201).json({
+                id: newRoom._path.segments[1],
+                player1:userId,
+                player2:null,
+                isEnded:false
+            })
         } catch (err) {
             res.status(500).json(err)
         }

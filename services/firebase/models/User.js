@@ -59,7 +59,21 @@ class User{
             throw err
         }
     }
-
+    static async findByUsername(username){
+        try {
+            const users = await db.collection("users")
+            const snapshot = await users.where("username" , "==", username).get();
+            let responseArr = []
+            snapshot.forEach(doc => {
+                let objUser = doc.data()
+                objUser.id = doc.id
+                responseArr.push(objUser)
+                });
+            return responseArr[0]
+        } catch (error) {
+              throw error
+        }
+    }
     static async update(id,payload){
         try {
             const userRef = db.collection("users").doc(id)
