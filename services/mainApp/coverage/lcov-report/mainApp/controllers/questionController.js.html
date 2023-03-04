@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">91.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/12</span>
+                <span class='fraction'>11/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -95,63 +95,63 @@
 <a name='L30'></a><a href='#L30'>30</a>
 <a name='L31'></a><a href='#L31'>31</a>
 <a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<a name='L33'></a><a href='#L33'>33</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const axios = require("axios");
 &nbsp;
 class QuestionController {
-<span class="fstat-no" title="function not covered" >    st</span>atic async getQuestionsByCategoryValue(request, response, next) {
-<span class="cstat-no" title="statement not covered" >        try {</span>
-            const { categoryValue } = <span class="cstat-no" title="statement not covered" >request.params;</span>
+    static async getQuestionsByCategoryValue(request, response, next) {
+        try {
+            const { categoryValue } = request.params;
             //! Soal quiz yang di fetch ada 5 (untuk sekarang)
-            let url = <span class="cstat-no" title="statement not covered" >`https://opentdb.com/api.php?amount=5&amp;category=${categoryValue}&amp;type=multiple`;</span>
+            let url = `https://opentdb.com/api.php?amount=5&amp;category=${categoryValue}&amp;type=multiple`;
 &nbsp;
-            const { data } = <span class="cstat-no" title="statement not covered" >await axios({</span>
+            const { data } = await axios({
                 method: "GET",
                 url: url,
             });
 &nbsp;
-            let result = <span class="cstat-no" title="statement not covered" >data.results.map(<span class="fstat-no" title="function not covered" >(e</span>l) =&gt; {</span>
-                let object = <span class="cstat-no" title="statement not covered" >{</span>
+            let result = data.results.map((el) =&gt; {
+                let object = {
                     category: el.category,
                     question: el.question.replaceAll("&amp;quot;", '"').replaceAll("\\", "").replaceAll("&amp;#039;", "'"),
                     correctAnswer: el.correct_answer.replaceAll("&amp;quot;", '"').replaceAll("\\", "").replaceAll("&amp;#039;", "'"),
-                    incorrectAnswers: el.incorrect_answers.map(<span class="fstat-no" title="function not covered" >(e</span>l) =&gt; <span class="cstat-no" title="statement not covered" >el.replaceAll("&amp;quot;", '"').replaceAll("\\", "").replaceAll("&amp;#039;", "'"))</span>,
+                    incorrectAnswers: el.incorrect_answers.map((el) =&gt; el.replaceAll("&amp;quot;", '"').replaceAll("\\", "").replaceAll("&amp;#039;", "'")),
                 };
-<span class="cstat-no" title="statement not covered" >                return object;</span>
+                return object;
             });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >            response.status(200).json(result);</span>
+            response.status(200).json(result);
         } catch (err) {
 <span class="cstat-no" title="statement not covered" >            next(err)</span>
         }
@@ -166,7 +166,7 @@ module.exports = QuestionController;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-03-04T12:48:05.325Z
+                at 2023-03-04T14:49:40.456Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
