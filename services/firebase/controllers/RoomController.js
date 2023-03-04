@@ -13,7 +13,9 @@ class RoomController{
     static async getRoomById(req,res){
         try {
             const {roomId} = req.params
+            console.log(roomId)
             const dataOfRoom = await Room.findById(roomId)
+            console.log(dataOfRoom,"dataOfRoommmmm")
             res.status(200).json(dataOfRoom)
         } catch (err) {
             if(err.status){

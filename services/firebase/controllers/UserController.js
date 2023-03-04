@@ -5,8 +5,7 @@ const User = require("../models/User")
 class UserController {
     static async getAllUsers(req, res) {
         try {
-            const arrayDataofUsers = await User.findAll()
-         
+            const arrayDataofUsers = await User.findAll()        
             res.status(200).json(arrayDataofUsers)
         } catch (err) {
             res.status(500).json(err)
@@ -16,6 +15,9 @@ class UserController {
         try {
             const { userId } = req.params
             const user = await User.findById(userId)
+            if(!user){
+                throw {status:404,message:"User not found"}
+            }
             res.status(200).json(user)
         } catch (err) {
             if (err.status) {
@@ -28,8 +30,14 @@ class UserController {
     static async registerUser(req, res) {
         try {
             const { username, email, password } = req.body
-            if (!email, !password, !password) {
-                throw { message: "Email, username, and password are required" }
+            if (!email) {
+                throw { message: "Email are required" }
+            }
+            if (!password) {
+                throw { message: "Password are required" }
+            }
+            if (!username) {
+                throw { message: "Username are required" }
             }
             const emailChecked = await User.findByEmail(email)
             if (emailChecked) {
@@ -45,8 +53,8 @@ class UserController {
                 profileName: username,
                 email,
                 password,
-                online: false,
                 isPlaying: false,
+                isFindMatch: false,
             })
             res.status(201).json({
                 id: newUser._path.segments[1],
@@ -57,8 +65,12 @@ class UserController {
             if (err.message === "Username already registered" || err.message === "Email already registered") {
                 console.log(err)
                 res.status(400).json({ message: err.message })
-            }else if(err.message === "Email, username, and password are required"){
-                res.status(400).json({ message: err.message })
+            }else if(err.message === "Email are required"){
+                res.status(400).json( {message:err.message} )
+            }else if(err.message=== "Password are required"){
+                res.status(400).json( {message:err.message} )
+            }else if(err.message==="Username are required"){
+                res.status(400).json( {message:err.message} )
             }else{
                 res.status(500).json(err)
             }
@@ -87,14 +99,17 @@ class UserController {
                 id: user.id,
                 email: user.email,
             })
-            await User.update(user.id, {
-                online: true,
-            })
+             
             res.status(200).json({ access_token, id: user.id, username: user.username })
         } catch (err) {
-            if (err.status) {
+            if (err.message==="Email is required") {
                 res.status(err.status).json({ message: err.message })
-            } else {
+            } else if(err.message==="Password is required"){
+                res.status(err.status).json({ message: err.message })
+            }else if(err.message==="Invalid email/password"){
+                res.status(err.status).json({ message: err.message })
+            }
+            else {
                 res.status(500).json({ message: "Internal server error" })
             }
         }
@@ -106,14 +121,17 @@ class UserController {
 
             const user = User.findById(userId)
             if (!user) {
-
+                throw { message: "User not found" }
             }
             await User.update(userId, {
                 isPlaying: true,
             })
             res.status(200).json({ message: "Succed update" })
         } catch (error) {
-            console.log(error)
+            console.log(error,"INI ERROR")
+            if(error.message==="User not found"){
+                res.status(404).json({message:error.message})
+            }
             res.status(500).json({ message: "Internal server error" })
         }
     }

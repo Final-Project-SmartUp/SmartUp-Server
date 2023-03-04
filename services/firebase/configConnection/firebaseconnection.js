@@ -1,4 +1,4 @@
-const credentials = require("../smartup-ba538-firebase-adminsdk-am8dw-17ff5b7f47.json")
+const credentials = require("../smartuppart2-firebase-adminsdk-ky107-fd76489801.json")
 const admin = require("firebase-admin")
 
 
