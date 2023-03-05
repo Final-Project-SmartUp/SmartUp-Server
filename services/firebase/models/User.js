@@ -83,6 +83,16 @@ class User{
             throw err
         }
     }
+
+    static async uploadImage(id,payload){
+        try {
+            // return db.collection("users").add(payload)
+            const userRef = db.collection("users").doc(id)
+            return userRef.update(payload);
+        } catch (error) {
+            throw error            
+        }
+    }
     
 }
 

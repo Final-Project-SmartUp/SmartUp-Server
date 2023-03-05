@@ -2,7 +2,7 @@ const express = require('express')
 const FriendController = require('../controllers/FriendController')
 const router = express.Router()
 
-
+router.get('/',FriendController.getAllFriend);
 router.post("/",FriendController.addFriend)
 
 

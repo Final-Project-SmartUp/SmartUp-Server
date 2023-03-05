@@ -1,11 +1,10 @@
 const { comparePasswordBcrypt } = require("../helpers/bcrpyt")
 const { signToken } = require("../helpers/jwt")
 const User = require("../models/User")
-
 class UserController {
     static async getAllUsers(req, res) {
         try {
-            const arrayDataofUsers = await User.findAll()        
+            const arrayDataofUsers = await User.findAll()
             res.status(200).json(arrayDataofUsers)
         } catch (err) {
             res.status(500).json(err)
@@ -15,8 +14,8 @@ class UserController {
         try {
             const { userId } = req.params
             const user = await User.findById(userId)
-            if(!user){
-                throw {status:404,message:"User not found"}
+            if (!user) {
+                throw { status: 404, message: "User not found" }
             }
             res.status(200).json(user)
         } catch (err) {
@@ -43,7 +42,7 @@ class UserController {
             if (emailChecked) {
                 throw { message: "Email already registered" }
             }
-           
+
             const usernameChecked = await User.findByUsername(username)
             if (usernameChecked) {
                 throw { message: "Username already registered" }
@@ -55,6 +54,7 @@ class UserController {
                 password,
                 isPlaying: false,
                 isFindMatch: false,
+                mmr: 0,
             })
             res.status(201).json({
                 id: newUser._path.segments[1],
@@ -65,13 +65,13 @@ class UserController {
             if (err.message === "Username already registered" || err.message === "Email already registered") {
                 console.log(err)
                 res.status(400).json({ message: err.message })
-            }else if(err.message === "Email are required"){
-                res.status(400).json( {message:err.message} )
-            }else if(err.message=== "Password are required"){
-                res.status(400).json( {message:err.message} )
-            }else if(err.message==="Username are required"){
-                res.status(400).json( {message:err.message} )
-            }else{
+            } else if (err.message === "Email are required") {
+                res.status(400).json({ message: err.message })
+            } else if (err.message === "Password are required") {
+                res.status(400).json({ message: err.message })
+            } else if (err.message === "Username are required") {
+                res.status(400).json({ message: err.message })
+            } else {
                 res.status(500).json(err)
             }
         }
@@ -99,14 +99,14 @@ class UserController {
                 id: user.id,
                 email: user.email,
             })
-             
+
             res.status(200).json({ access_token, id: user.id, username: user.username })
         } catch (err) {
-            if (err.message==="Email is required") {
+            if (err.message === "Email is required") {
                 res.status(err.status).json({ message: err.message })
-            } else if(err.message==="Password is required"){
+            } else if (err.message === "Password is required") {
                 res.status(err.status).json({ message: err.message })
-            }else if(err.message==="Invalid email/password"){
+            } else if (err.message === "Invalid email/password") {
                 res.status(err.status).json({ message: err.message })
             }
             else {
@@ -114,7 +114,6 @@ class UserController {
             }
         }
     }
-
     static async updateIsPlayingUser(req, res) {
         try {
             const { userId } = req.params
@@ -128,10 +127,24 @@ class UserController {
             })
             res.status(200).json({ message: "Succed update" })
         } catch (error) {
-            console.log(error,"INI ERROR")
-            if(error.message==="User not found"){
-                res.status(404).json({message:error.message})
+            console.log(error, "INI ERROR")
+            if (error.message === "User not found") {
+                res.status(404).json({ message: error.message })
             }
+            res.status(500).json({ message: "Internal server error" })
+        }
+    }
+
+    static async uploadImageUser(req, res) {
+        try {
+            console.log(req.user.id)
+            const image = req.file.path
+            const updateUser = await User.uploadImage(req.user.id, {
+                image: image
+            })
+            res.status(200).json(updateUser)
+        } catch (error) {
+            console.log(error)
             res.status(500).json({ message: "Internal server error" })
         }
     }

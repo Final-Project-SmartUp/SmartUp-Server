@@ -13,6 +13,7 @@ class Friend{
 
     static async findAll(){
         try {
+            
             const friends = await db.collection("friends")
             const snapshot = await friends.get();
             let responseArr = []
