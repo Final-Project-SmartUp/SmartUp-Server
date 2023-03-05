@@ -3,7 +3,9 @@ const Friend= require("../models/Friend");
 class FriendController {
     static async addFriend(req, res) {
         try {
-            const { userId, friendId } = req.body;
+            const { friendId } = req.body;
+            console.log(req.user,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+            const userId=req.user.id
             const payload = {
                 userId,
                 friendId,
