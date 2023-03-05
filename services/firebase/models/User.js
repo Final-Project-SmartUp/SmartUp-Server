@@ -59,6 +59,7 @@ class User{
             throw err
         }
     }
+
     static async findByUsername(username){
         try {
             const users = await db.collection("users")

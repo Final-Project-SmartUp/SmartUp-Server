@@ -31,13 +31,17 @@ class RoomController{
             const  newRoom = await Room.create({
                 player1 : userId,
                 player2 : null,
-                isEnded : false
+                isEnded : false,
+                scorePlayer1:0,
+                scorePlayer2:0,
             })
             res.status(201).json({
                 id: newRoom._path.segments[1],
                 player1:userId,
                 player2:null,
-                isEnded:false
+                isEnded:false,
+                scorePlayer1:0,
+                scorePlayer2:0,
             })
         } catch (err) {
             res.status(500).json(err)
