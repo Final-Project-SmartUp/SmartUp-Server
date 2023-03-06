@@ -1,11 +1,18 @@
+const redis = require("../configConnection/redisConnection");
 const Room = require("../models/Room");
 
 class RoomController {
     static async getAllRoomsPlayer2Empty(req, res) {
         try {
-            const { categoryId } = req.params;
-            const dataOfRooms = await Room.findAll(categoryId);
-            res.status(200).json(dataOfRooms);
+            const cacheRoom = await redis.get("rooms");
+            if(cacheRoom) {
+                res.status(200).json(JSON.parse(cacheRoom));
+            }else{
+                const { categoryId } = req.params;
+                const dataOfRooms = await Room.findAll(categoryId);
+                res.status(200).json(dataOfRooms);
+            }
+
         } catch (err) {
             res.status(500).json({ message: "Internal server error" });
         }
@@ -35,6 +42,7 @@ class RoomController {
                 scorePlayer2: 0,
                 category: categoryId
             });
+            await redis.del("rooms")
             res.status(201).json({
                 id: newRoom._path.segments[1],
                 player1: userId,
@@ -57,6 +65,8 @@ class RoomController {
             const updatedRoom = await Room.update(roomId, {
                 player2: userId,
             });
+            await redis.del("rooms")
+
             res.status(200).json({ message: "Player 2 joined the room" });
         } catch (err) {
             if (err.status) {
@@ -70,6 +80,8 @@ class RoomController {
         try {
             const { roomId } = req.params;
             await Room.delete(roomId);
+            await redis.del("rooms")
+
             res.status(200).json({ message: "Success delete room" });
         } catch (err) {
             res.status(500).json({ message: "Internal server error" });

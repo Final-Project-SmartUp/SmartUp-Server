@@ -1,9 +1,12 @@
+const axios = require("axios");
+const redis = require("../configConnection/redisConnection");
 const Friend = require("../models/Friend");
 const User = require('../models/User');
 
+
 class FriendController {
     static async addFriend(req, res) {
-        try {
+        try {            
             const friendId = req.params.friendId;
             console.log(friendId)
             const userId = req.user.id

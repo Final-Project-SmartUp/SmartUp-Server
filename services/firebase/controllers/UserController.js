@@ -1,11 +1,20 @@
 const { comparePasswordBcrypt } = require("../helpers/bcrpyt")
 const { signToken } = require("../helpers/jwt")
 const User = require("../models/User")
+const redis = require("../configConnection/redisConnection");
+const axios = require("axios");
 class UserController {
     static async getAllUsers(req, res) {
         try {
-            const arrayDataofUsers = await User.findAll()
-            res.status(200).json(arrayDataofUsers)
+            let cacheUser = await redis.get("users");
+            console.log(cacheUser)
+            if(cacheUser){
+                return res.status(200).json(JSON.parse(cacheUser));
+            }else{
+                const arrayDataofUsers = await User.findAll()
+                res.status(200).json(arrayDataofUsers)
+                redis.set("users", JSON.stringify(arrayDataofUsers))
+            }
         } catch (err) {
             res.status(500).json(err)
         }
@@ -56,6 +65,7 @@ class UserController {
                 isFindMatch: false,
                 mmr: 0,
             })
+            await redis.del("users")
             res.status(201).json({
                 id: newUser._path.segments[1],
                 username,
