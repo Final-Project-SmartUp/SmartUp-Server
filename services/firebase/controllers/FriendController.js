@@ -1,21 +1,29 @@
-const Friend= require("../models/Friend");
+const Friend = require("../models/Friend");
+const User = require('../models/User');
 
 class FriendController {
     static async addFriend(req, res) {
         try {
-            const { friendId } = req.body;
-            console.log(req.user,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-            const userId=req.user.id
+            const friendId = req.params.friendId;
+            console.log(friendId)
+            const userId = req.user.id
             const payload = {
                 userId,
                 friendId,
+                status: true,
+                isFriend: false
+            };
+            const payload2 = {
+                userId: friendId,
+                friendId: userId,
+                status: false,
+                isFriend: false
             };
             const newFriend = await Friend.addFriend(payload);
-            console.log(newFriend)
+            const newFriend2 = await Friend.addFriend(payload2)
             res.status(201).json({
-                id: newFriend._path.segments[1],
-                userId,
-                friendId,
+                payload,
+                payload2
             });
         } catch (err) {
             console.log(err)
@@ -25,10 +33,74 @@ class FriendController {
 
     static async getAllFriend(req, res) {
         try {
-            const friends = await Friend.findAll();
+            const userId = req.user.id;
+            const friends = await Friend.findAll(userId);
+            const user = await User.findAll();
+            const friend = friends.map(el => {
+                const result = user.find(({ id }) => id === el.friendId)
+                return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
+            })
+
             res.status(200).json(friends);
         } catch (err) {
             res.status(500).json(err);
+        }
+    }
+
+    static async invitationFriend(req, res) {
+        try {
+            const userId = req.user.id
+            const friends = await Friend.invitationFriend(userId);
+            console.log(userId)
+            const user = await User.findAll()
+
+            const friend = friends.map(el => {
+                const result = user.find(({ id }) => id === el.friendId)
+                return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
+            })
+            console.log(friend)
+            res.status(200).json(friend);
+        } catch (error) {
+            console.log(error)
+            res.status(500).json(error);
+        }
+    }
+
+    static async requestFriend(req, res) {
+        try {
+            const userId = req.user.id
+
+            const friends = await Friend.requestFriend(userId);
+            const user = await User.findAll()
+            const friend = friends.map(el => {
+                const result = user.find(({ id }) => id === el.friendId)
+                return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
+            })
+            console.log(friend)
+            res.status(200).json(friend);
+        } catch (error) {
+            console.log(error)
+            res.status(500).json(error);
+        }
+    }
+
+    static async acceptFriend(req,res){
+        try {
+            const id = req.params.id
+            console.log(id)
+            const data = await Friend.friendId(id)
+            console.log(data)
+             await Friend.acceptFriend(id,{
+                    isFriend:true,
+                    status:true
+             })
+
+             await Friend.friendIdUpdate(data.userId,data.friendId)
+
+             res.status(200).json({message:'Add Friend Success!'})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json(error)
         }
     }
 
@@ -39,4 +111,4 @@ class FriendController {
 
 
 
-module.exports=FriendController;
+module.exports = FriendController;

@@ -3,7 +3,10 @@ const FriendController = require('../controllers/FriendController')
 const router = express.Router()
 
 router.get('/',FriendController.getAllFriend);
-router.post("/",FriendController.addFriend)
+router.get('/invitationFriend',FriendController.invitationFriend)
+router.get('/requestFriend',FriendController.requestFriend);
+router.put('/acceptFriend/:id',FriendController.acceptFriend)
+router.post("/:friendId",FriendController.addFriend);
 
 
 module.exports = router

@@ -45,24 +45,21 @@ describe("POST /Create rooms", () => {
                 return done();
             });
     }, 30000);
-    test("201 success Create room", (done) => {
+    test("200 success Create room", (done) => {
         request(app)
-            .post(`/rooms/createRoom/${userId}`)
+            .get(`/friends`)
             .set("access_token", validToken)
             .then((response) => {
-                console.log(`rooms/createRoom/${userId}`)
-                const { body, status } = response;
-                idRoom = body.id;
-                expect(status).toBe(201);
+                expect(status).toBe(200);
                 done();
             })
             .catch((err) => {
                 done(err);
             });
     });
-    test("200 success get room", (done) => {
+    test("201 Add Friend ", (done) => {
         request(app)
-            .get("/rooms")
+            .post("/friends/")
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
