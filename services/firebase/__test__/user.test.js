@@ -1,8 +1,6 @@
 const app = require("../app");
 const request = require("supertest");
 const { User } = require("../models/User");
-const apek= require('.../mainApp/app.js')
-console.log(apek, "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
 
 let r = (Math.random() + 1).toString(36).substring(7);
 

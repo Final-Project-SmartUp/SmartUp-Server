@@ -22,7 +22,7 @@ cloudinary.config({
 
 router.get("/",UserController.getAllUsers)
 router.post("/register",UserController.registerUser)
-router.put('/addImage',auth, upload.single('image'), UserController.uploadImageUser);
+router.put('/editProfile',auth, upload.single('image'), UserController.uploadImageUser);
 router.post("/login", UserController.loginUser)
 router.get("/:userId",UserController.getUserById)
 router.patch("/:userId",UserController.updateIsPlayingUser)

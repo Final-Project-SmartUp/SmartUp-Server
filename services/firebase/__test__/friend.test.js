@@ -1,6 +1,7 @@
-const app = require("../app");
-const request = require("supertest");
-const { Room } = require("../models/Room");
+const app = require('../app');
+const request = require('supertest');
+const { Friend } = require('../models/Friend');
+
 let r = (Math.random() + 1).toString(36).substring(7);
 
 const user1 = {
@@ -14,6 +15,7 @@ let idRoom;
 let userId;
 
 
+
 describe("POST /Create rooms", () => {
     test("201 Success register - should create new User", (done) => {
         request(app)
@@ -25,7 +27,6 @@ describe("POST /Create rooms", () => {
                 expect(status).toBe(201);
                 expect(body).toHaveProperty("id", expect.any(String));
                 userId = body.id;
-                console.log(userId, "<<<<<<<<<<<<<<<<<< USER ID BANGET")
                 expect(body).toHaveProperty("username", expect.any(String));
                 expect(body).toHaveProperty("email", expect.any(String));
                 return done();
@@ -158,5 +159,6 @@ describe("GET /rooms/byId", () => {
             });
     });
 });
+
 
 

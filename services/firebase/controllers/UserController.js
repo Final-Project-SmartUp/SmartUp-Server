@@ -139,10 +139,14 @@ class UserController {
         try {
             console.log(req.user.id)
             const image = req.file.path
+            const profileName = req.body.profileName
+            console.log(profileName)
             const updateUser = await User.uploadImage(req.user.id, {
-                image: image
+                image: image,
+                profileName: profileName,
             })
-            res.status(200).json(updateUser)
+            const user= await User.findById(req.user.id)
+            res.status(200).json(user)
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "Internal server error" })
