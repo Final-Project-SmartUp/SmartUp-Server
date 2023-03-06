@@ -125,7 +125,6 @@ class FriendController {
 
 }
 
-//find Friend where req.user= userId
 
 
 

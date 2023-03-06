@@ -3,7 +3,8 @@ const Room = require("../models/Room");
 class RoomController {
     static async getAllRoomsPlayer2Empty(req, res) {
         try {
-            const dataOfRooms = await Room.findAll();
+            const { categoryId } = req.params;
+            const dataOfRooms = await Room.findAll(categoryId);
             res.status(200).json(dataOfRooms);
         } catch (err) {
             res.status(500).json({ message: "Internal server error" });
@@ -24,6 +25,7 @@ class RoomController {
     }
     static async createRoom(req, res) {
         try {
+            const categoryId= req.body.categoryId
             const { userId } = req.params;
             const newRoom = await Room.create({
                 player1: userId,
@@ -31,6 +33,7 @@ class RoomController {
                 isEnded: false,
                 scorePlayer1: 0,
                 scorePlayer2: 0,
+                category: categoryId
             });
             res.status(201).json({
                 id: newRoom._path.segments[1],
@@ -39,6 +42,7 @@ class RoomController {
                 isEnded: false,
                 scorePlayer1: 0,
                 scorePlayer2: 0,
+                category: categoryId
             });
         } catch (err) {
             res.status(500).json(err);

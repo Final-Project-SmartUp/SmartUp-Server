@@ -2,9 +2,9 @@ const db = require("../configConnection/firebaseconnection");
 const { hashPassword } = require("../helpers/bcrpyt");
 
 class Room{
-    static async findAll(){
+    static async findAll(category){
         try {
-            const rooms = await db.collection("rooms").where("player2", "==", null)
+            const rooms = await db.collection("rooms").where('category','==',category).where("player2", "==", null)
             const snapshot = await rooms.get();
             let responseArr = []
             snapshot.forEach(doc => {
