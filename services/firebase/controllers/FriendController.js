@@ -103,6 +103,25 @@ class FriendController {
             res.status(500).json(error)
         }
     }
+    static async declineFriend(req,res){
+        try {
+            const id = req.params.id
+            console.log(id)
+            const data = await Friend.friendId(id)
+            console.log(data)
+             await Friend.acceptFriend(id,{
+                    isFriend:false,
+                    status:true
+             })
+
+             await Friend.friendIdUpdate(data.userId,data.friendId)
+
+             res.status(200).json({message:'Decline Friend Success!'})
+        } catch (error) {
+            console.log(error)
+            res.status(500).json(error)
+        }
+    }
 
 }
 

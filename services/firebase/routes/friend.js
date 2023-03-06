@@ -6,6 +6,7 @@ router.get('/',FriendController.getAllFriend);
 router.get('/invitationFriend',FriendController.invitationFriend)
 router.get('/requestFriend',FriendController.requestFriend);
 router.put('/acceptFriend/:id',FriendController.acceptFriend)
+router.put('/decline/:id',FriendController.declineFriend)
 router.post("/:friendId",FriendController.addFriend);
 
 
