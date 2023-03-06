@@ -9,6 +9,7 @@ class CategoryController {
                     id: el.id,
                     name: el.name,
                     value: el.value,
+                    imageUrl: el.imgUrl,
                 };
                 return object;
             });
