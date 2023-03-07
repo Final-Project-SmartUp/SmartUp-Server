@@ -8,7 +8,6 @@ class UserController {
     static async getAllUsers(req, res) {
         try {
             let cacheUser = await redis.get("users");
-            console.log(cacheUser)
             if (cacheUser) {
                 return res.status(200).json(JSON.parse(cacheUser));
             } else {
@@ -76,7 +75,7 @@ class UserController {
             })
         } catch (err) {
             if (err.message === "Username already registered" || err.message === "Email already registered") {
-                console.log(err)
+             
                 res.status(400).json({ message: err.message })
             } else if (err.message === "Email are required") {
                 res.status(400).json({ message: err.message })

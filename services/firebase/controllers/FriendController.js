@@ -8,7 +8,6 @@ class FriendController {
     static async addFriend(req, res) {
         try {            
             const friendId = req.params.friendId;
-            console.log(friendId)
             const userId = req.user.id
             const payload = {
                 userId,

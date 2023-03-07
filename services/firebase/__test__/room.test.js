@@ -24,8 +24,8 @@ describe("POST /Create rooms", () => {
                 const { body, status } = res;
                 expect(status).toBe(201);
                 expect(body).toHaveProperty("id", expect.any(String));
+                console.log(body.id,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ini body")
                 userId = body.id;
-                console.log(userId, "<<<<<<<<<<<<<<<<<< USER ID BANGET")
                 expect(body).toHaveProperty("username", expect.any(String));
                 expect(body).toHaveProperty("email", expect.any(String));
                 return done();
@@ -44,14 +44,16 @@ describe("POST /Create rooms", () => {
                 return done();
             });
     }, 30000);
+    console.log(userId,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
     test("201 success Create room", (done) => {
         request(app)
             .post(`/rooms/createRoom/${userId}`)
             .set("access_token", validToken)
+            .send('categoryId', 1)
             .then((response) => {
-                console.log(`rooms/createRoom/${userId}`)
                 const { body, status } = response;
                 idRoom = body.id;
+
                 expect(status).toBe(201);
                 done();
             })
@@ -61,10 +63,11 @@ describe("POST /Create rooms", () => {
     });
     test("200 success get room", (done) => {
         request(app)
-            .get("/rooms")
+            .get("/rooms/getRoom/:categoryId")
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
+                console.log(body,response)
                 expect(status).toBe(200);
                 expect(Array.isArray(body)).toBeTruthy();
 
@@ -77,7 +80,7 @@ describe("POST /Create rooms", () => {
 
     test("401 get rooms with invalid token", (done) => {
         request(app)
-            .get("/rooms")
+            .get("/rooms//getRoom/:categoryId")
             .set("access_token", invalidToken)
             .then((response) => {
                 const { body, status } = response;
@@ -93,7 +96,7 @@ describe("POST /Create rooms", () => {
 
     test("401 get room without token", (done) => {
         request(app)
-            .get("/rooms")
+            .get("/rooms/getRoom/:categoryId")
             .then((response) => {
                 const { body, status } = response;
 
@@ -148,7 +151,6 @@ describe("GET /rooms/byId", () => {
             .get(`/rooms/${idRoom}`)
             .then((response) => {
                 const { body, status } = response;
-
                 expect(status).toBe(401);
                 expect(body).toHaveProperty("message", "Invalid token");
                 done();

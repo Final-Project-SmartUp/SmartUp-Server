@@ -24,7 +24,7 @@ const authentication = async (req, response, next) => {
   
     next();
   } catch (err) {
-    console.log(err);
+
     if (err.name === "JsonWebTokenError") {
       response.status(401).json({ message: "Invalid token" });
     } else {

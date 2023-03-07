@@ -50,6 +50,7 @@ describe("POST /Create rooms", () => {
             .get(`/friends`)
             .set("access_token", validToken)
             .then((response) => {
+                const { body, status } = response;
                 expect(status).toBe(200);
                 done();
             })
@@ -59,96 +60,13 @@ describe("POST /Create rooms", () => {
     });
     test("201 Add Friend ", (done) => {
         request(app)
-            .post("/friends/")
+            .post("/friends/87151bnZ2Pkhxe9D2UFF")
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
-                expect(status).toBe(200);
-                expect(Array.isArray(body)).toBeTruthy();
-
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 get rooms with invalid token", (done) => {
-        request(app)
-            .get("/rooms")
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-
-                expect(status).toBe(401);
-                expect(body).toHaveProperty("message", "Invalid token");
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 get room without token", (done) => {
-        request(app)
-            .get("/rooms")
-            .then((response) => {
-                const { body, status } = response;
-
-                expect(status).toBe(401);
-                expect(body).toHaveProperty("message", "Invalid token");
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-});
-describe("GET /rooms/byId", () => {
-    test("200 success get room", (done) => {
-        request(app)
-            .get(`/rooms/${idRoom}`)
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                // idRoom = body[0].id;
-                expect(status).toBe(200);
+                expect(status).toBe(201);
                 // expect(Array.isArray(body)).toBeTruthy();
-                expect(body).toHaveProperty("isEnded", expect.any(Boolean));
-                expect(body).toHaveProperty("player2");
-                expect(body).toHaveProperty("player1");
-                expect(body).toHaveProperty("id", expect.any(String));
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
 
-    test("401 get rooms with invalid token", (done) => {
-        request(app)
-            .get(`/rooms/${idRoom}`)
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-
-                expect(status).toBe(401);
-                expect(body).toHaveProperty("message", "Invalid token");
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 get room without token", (done) => {
-        request(app)
-            .get(`/rooms/${idRoom}`)
-            .then((response) => {
-                const { body, status } = response;
-
-                expect(status).toBe(401);
-                expect(body).toHaveProperty("message", "Invalid token");
                 done();
             })
             .catch((err) => {
@@ -156,6 +74,7 @@ describe("GET /rooms/byId", () => {
             });
     });
 });
+
 
 
 

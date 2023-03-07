@@ -7,7 +7,6 @@ class Friend {
             console.log(payload)
             return db.collection("friends").add(payload)
         } catch (err) {
-            console.log(err)
             throw err
         }
     }
@@ -60,7 +59,6 @@ class Friend {
             throw error
         }
     }
-
     static async acceptFriend(id, payload) {
         try {
             const friends = await db.collection("friends").doc(id)
@@ -69,7 +67,6 @@ class Friend {
             throw error
         }
     }
-
     static async friendId(id) {
         try {
             const friend = db.collection("friends").doc(id)
@@ -93,7 +90,7 @@ class Friend {
                 const docRef = usersRef.doc(doc.id);
                 docRef.update({ isFriend: true, status: true });
             });
-            
+
         } catch (error) {
             throw error
         }
