@@ -193,6 +193,7 @@ describe("User Routes Test", () => {
       request(app)
         .get(`/users/${userId}`)
         .end((err, res) => {
+          console.log(res.body, 'masuk sini');
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(200);
