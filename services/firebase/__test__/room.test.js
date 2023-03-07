@@ -1,9 +1,8 @@
 const app = require("../app");
 const request = require("supertest");
 const { Room } = require("../models/Room");
-const Rooms = require("../models/Room");
 let r = (Math.random() + 1).toString(36).substring(7);
-
+// const { mockRequest, mockResponse } = require('jest-mock-req-res');
 const RoomController = require("../controllers/RoomController");
 
 
@@ -85,7 +84,7 @@ describe("POST /Create rooms", () => {
 
     test("401 get rooms with invalid token", (done) => {
         request(app)
-            .get("/rooms/getRoom/:categoryId")
+            .get("/rooms//getRoom/:categoryId")
             .set("access_token", invalidToken)
             .then((response) => {
                 const { body, status } = response;
@@ -235,26 +234,26 @@ describe('ALL ROOM 500', () => {
         expect(response.status).toBe(500);
     });
 
-});
-describe('ALL ROOM 500', () => {
-    // Define the test
-    it('should return a status code of 500', async () => {
-        // Create a mock implementation of the route handler that always throws an error
-        const mockHandler = jest.fn(() => {
-            throw new Error('An error occurred');
+    describe('GET /example', () => {
+        it('should return a 500 status code when an error occurs', async () => {
+          // Create a mock handler function that always throws an error
+          const mockHandler = jest.fn((req, res, next) => {
+            throw new Error('Internal Server Error');
+          });
+      
+          // Replace the original route handler with the mock handler
+          app.get('/rooms/getRoom/:categoryId', mockHandler);
+      
+          // Make a GET request to the route
+          const response = await request(app).get('/rooms/getRoom/:categoryId').set("access_token", validToken);
+      
+          // Expect the response status code to be 500
+          expect(response.status).toBe(500);
         });
+      });
 
-        // Replace the original route handler with the mock implementation
-        app.get(`/rooms/getRoom/100`, mockHandler);
 
-        // Make a GET request to the route using supertest
-        const response = await request(app).get(`/rooms/getRoom/100`).set("access_token", validToken);
 
-        // Check that the response has a status code of 500
-        expect(response.status).toBe(500);
-    });
-
-});
 
 describe('ROOM 500', () => {
     test('myAsyncFunction returns a rejected promise with status code 500', async () => {
@@ -373,3 +372,5 @@ describe('ALL ROOM 500', () => {
     });
 
 });
+});
+
