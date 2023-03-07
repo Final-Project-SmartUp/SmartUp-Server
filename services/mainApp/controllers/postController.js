@@ -1,5 +1,5 @@
-const { Post, Comment } = require("../models");
-
+const { Post, Comment, Category } = require("../models");
+const axios = require("axios");
 class PostController {
     static async getAllPostByCategoryId(request, response, next) {
         try {
@@ -13,28 +13,49 @@ class PostController {
                 },
             });
 
-            if (posts.length === 0) {
-                throw { status: 404, message: "Posts not found" };
-            }
+            // if (posts.length === 0) {
+            //     throw { status: 404, message: "Posts not found" };
+            // }
 
             response.status(200).json(posts);
         } catch (err) {
-            next(err)
+            next(err);
         }
     }
 
     static async addPost(request, response, next) {
         try {
-            const { title, description } = request.body;
+            const { title, description, userId, categoryId } = request.body;
+            console.log(userId, "<<<");
             const post = await Post.create({
                 title,
                 description,
-                UserId: 1, //! ini tegantung sama yang login
-                CategoryId: 1, //! ini tergantung dia pas ngeadd ada dihalaman apa
+                UserId: userId, //! ini tegantung sama yang login
+                CategoryId: categoryId, //! ini tergantung dia pas ngeadd ada dihalaman apa
             });
             response.status(201).json(post);
         } catch (err) {
-            next(err)
+            next(err);
+        }
+    }
+
+    static async getPostById(request, response, next) {
+        try {
+            const { postId } = request.params;
+            let post = await Post.findOne({
+                where: {
+                    id: postId,
+                },
+                include: [Comment, Category],
+            });
+
+            if (!post) {
+                throw { status: 404, message: "Post not found" };
+            }
+
+            response.status(200).json(post);
+        } catch (err) {
+            next(err);
         }
     }
 
@@ -69,7 +90,7 @@ class PostController {
                 message: `Post with id ${postId} has been updated`,
             });
         } catch (err) {
-            next (err)
+            next(err);
         }
     }
 
@@ -96,7 +117,7 @@ class PostController {
                 message: `Post with id ${postId} has been deleted`,
             });
         } catch (err) {
-           next(err)
+            next(err);
         }
     }
 }
