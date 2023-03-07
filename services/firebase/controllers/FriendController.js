@@ -38,11 +38,11 @@ class FriendController {
             const userId = req.user.id;
             const friends = await Friend.findAll(userId);
             const user = await User.findAll();
+            console.log(friends)
             const friend = friends.map(el => {
-                const result = user.find(({ id }) => id === el.userId)
+                const result = user.find(({ id }) => id === el.friendId)
                 return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
             })
-
             res.status(200).json(friend);
         } catch (err) {
             res.status(500).json(err);

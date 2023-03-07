@@ -141,7 +141,7 @@ class UserController {
             console.log(req.user.id)
             const image = req.file.path
             const profileName = req.body.profileName
-            console.log(profileName)
+            console.log(req.file)
             const updateUser = await User.uploadImage(req.user.id, {
                 image: image,
                 profileName: profileName,
