@@ -23,6 +23,7 @@ cloudinary.config({
 
 
 router.get("/",UserController.getAllUsers)
+router.get('/leaderboard',UserController.leaderBoard);
 router.post("/register",UserController.registerUser)
 router.post('/checkoutGem',authentication,UserController.checkout);
 router.put('/editProfile',auth, upload.single('image'), UserController.uploadImageUser);

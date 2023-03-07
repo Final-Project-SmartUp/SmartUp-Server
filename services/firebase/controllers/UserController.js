@@ -66,6 +66,7 @@ class UserController {
                 isPlaying: false,
                 isFindMatch: false,
                 mmr: 0,
+                gem:0,
             })
             await redis.del("users")
             res.status(201).json({
@@ -146,7 +147,6 @@ class UserController {
             res.status(500).json({ message: "Internal server error" })
         }
     }
-
     static async uploadImageUser(req, res) {
         try {
             console.log(req.user.id)
@@ -164,7 +164,6 @@ class UserController {
             res.status(500).json({ message: "Internal server error" })
         }
     }
-
     static async checkout(req,response){
         try {
             const userId=req.user.id
@@ -198,7 +197,17 @@ class UserController {
         } catch (error) {
             console.log(error);
         }
-      }
+    }
+    static async leaderBoard(req,res){
+        try {
+            const users= await User.findAll()
+            const sortedUsers= users.sort((a,b)=>b.mmr-a.mmr)
+            res.status(200).json(sortedUsers)
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({message:"Internal server error"})
+        }
+    }
 
 }
 

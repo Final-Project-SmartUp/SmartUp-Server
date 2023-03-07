@@ -44,7 +44,7 @@ class FriendController {
                 return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
             })
 
-            res.status(200).json(friends);
+            res.status(200).json(friend);
         } catch (err) {
             res.status(500).json(err);
         }
