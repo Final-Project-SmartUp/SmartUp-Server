@@ -200,14 +200,22 @@ class UserController {
     }
     static async leaderBoard(req,res){
         try {
-            const users= await User.findAll()
-            const sortedUsers= users.sort((a,b)=>b.mmr-a.mmr)
-            res.status(200).json(sortedUsers)
+            const leaderBoard= await User.leaderBoard()
+            res.status(200).json(leaderBoard)      
         } catch (error) {
             console.log(error)
             res.status(500).json({message:"Internal server error"})
         }
     }
+
+    static async addGem(req,res){
+        try {
+            
+        } catch (error) {
+            
+        }
+    }
+    
 
 }
 

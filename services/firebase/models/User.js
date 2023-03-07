@@ -93,6 +93,32 @@ class User{
             throw error            
         }
     }
+
+    static async leaderBoard(){
+        try {
+            const users = await db.collection("users")
+            const snapshot = await users.orderBy("mmr","desc").limit(30).get();
+            let responseArr = []
+            snapshot.forEach(doc => {
+                let objUser = doc.data()
+                objUser.id = doc.id
+                delete objUser.password
+                responseArr.push(objUser)
+              });
+            return responseArr
+        } catch (error) {
+           throw error
+        }
+    }
+
+    static async updateGem(id,payload){
+        try {
+            const userRef = db.collection("users").doc(id)
+            return userRef.update(payload);
+        } catch (err) {
+            throw err
+        }
+    }
     
 }
 
