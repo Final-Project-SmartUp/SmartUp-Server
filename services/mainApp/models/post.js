@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
         static associate(models) {
             // define association here
             Post.belongsTo(models.Category, { foreignKey: "CategoryId" });
-            Post.hasMany(models.Comment)
+            Post.hasMany(models.Comment);
         }
     }
     Post.init(
@@ -39,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
                     },
                 },
             },
-            UserId: DataTypes.INTEGER,
+            UserId: DataTypes.STRING,
             CategoryId: DataTypes.INTEGER,
         },
         {

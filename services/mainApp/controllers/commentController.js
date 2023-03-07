@@ -1,17 +1,25 @@
 const { Comment } = require("../models");
+const axios = require("axios");
 
 class CommentController {
     static async addComment(request, response, next) {
         try {
-            const { description } = request.body;
+            const { description, PostId, UserId } = request.body;
+
+            const { data: user } = await axios({
+                method: "GET",
+                url: `http://localhost:3001/users/${UserId}`,
+            });
+
             const comment = await Comment.create({
                 description,
-                PostId: 1, //!Tergantung postan mana yang di add comment
-                UserId: 1, //!Tergantung user siapa yang ngepost
+                PostId, //!Tergantung postan mana yang di add comment
+                UserId, //!Tergantung user siapa yang ngepost
+                profileName: user.profileName,
             });
             response.status(201).json(comment);
         } catch (err) {
-            next (err)
+            next(err);
         }
     }
 
@@ -45,7 +53,7 @@ class CommentController {
                 message: `Comment with id ${commentId} has been edited`,
             });
         } catch (err) {
-            next(err)
+            next(err);
         }
     }
 
@@ -67,12 +75,12 @@ class CommentController {
                     id: commentId,
                 },
             });
-            
+
             response.status(200).json({
                 message: `Comment with id ${commentId} has been deleted`,
             });
         } catch (err) {
-           next (err)
+            next(err);
         }
     }
 }
