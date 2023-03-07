@@ -3,6 +3,8 @@ const { signToken } = require("../helpers/jwt")
 const User = require("../models/User")
 const redis = require("../configConnection/redisConnection");
 const axios = require("axios");
+const midtransClient = require('midtrans-client');
+
 class UserController {
     static async getAllUsers(req, res) {
         try {
@@ -162,6 +164,41 @@ class UserController {
             res.status(500).json({ message: "Internal server error" })
         }
     }
+
+    static async checkout(req,response){
+        try {
+            const userId=req.user.id
+            // console.log(req.user)
+            const user = User.findById(userId)
+            const totalGem= req.body.totalGem;
+
+            let gross_amount= totalGem*6000;
+            let snap = new midtransClient.Snap({
+                isProduction : false,
+                serverKey : 'SB-Mid-server-Eu_prUEDontUM8Xy5RcFUqd6'
+            });
+    
+            let parameter = {
+                "transaction_details": {
+                    "order_id": "YOUR-ORDERID"+ Math.floor(100000 + Math.random()*9000000),
+                    "gross_amount": gross_amount
+                },
+                "credit_card":{
+                    "secure" : true
+                },
+                "customer_details": {
+                    "email": user.email,
+                }
+            };
+    
+            const midtransToken= await snap.createTransaction(parameter)
+            
+            response.status(201).json(midtransToken)
+    
+        } catch (error) {
+            console.log(error);
+        }
+      }
 
 }
 

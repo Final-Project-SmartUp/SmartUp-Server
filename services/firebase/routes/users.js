@@ -1,8 +1,10 @@
 const express = require('express');
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
-const UserController = require('../controllers/UserController')
+const UserController = require('../controllers/UserController');
+const authentication = require('../middlewares/auth');
 const router = express.Router()
+
 const cloudinary = require('cloudinary').v2;
 const auth = require('../middlewares/auth')
 cloudinary.config({
@@ -22,6 +24,7 @@ cloudinary.config({
 
 router.get("/",UserController.getAllUsers)
 router.post("/register",UserController.registerUser)
+router.post('/checkoutGem',authentication,UserController.checkout);
 router.put('/editProfile',auth, upload.single('image'), UserController.uploadImageUser);
 router.post("/login", UserController.loginUser)
 router.get("/:userId",UserController.getUserById)
