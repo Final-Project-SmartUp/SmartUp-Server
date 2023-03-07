@@ -2,7 +2,6 @@ const { comparePasswordBcrypt } = require("../helpers/bcrpyt")
 const { signToken } = require("../helpers/jwt")
 const User = require("../models/User")
 const redis = require("../configConnection/redisConnection");
-const axios = require("axios");
 const midtransClient = require('midtrans-client');
 
 class UserController {
@@ -10,9 +9,9 @@ class UserController {
         try {
             let cacheUser = await redis.get("users");
             console.log(cacheUser)
-            if(cacheUser){
+            if (cacheUser) {
                 return res.status(200).json(JSON.parse(cacheUser));
-            }else{
+            } else {
                 const arrayDataofUsers = await User.findAll()
                 res.status(200).json(arrayDataofUsers)
                 redis.set("users", JSON.stringify(arrayDataofUsers))
@@ -66,7 +65,8 @@ class UserController {
                 isPlaying: false,
                 isFindMatch: false,
                 mmr: 0,
-                gem:0,
+                gem: 0,
+                image: 'https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-cartoon-avatar-funny-avatar-man-avatar-exaggerated-avatar-png-image_2625097.jpg'
             })
             await redis.del("users")
             res.status(201).json({
@@ -157,65 +157,80 @@ class UserController {
                 image: image,
                 profileName: profileName,
             })
-            const user= await User.findById(req.user.id)
+            const user = await User.findById(req.user.id)
             res.status(200).json(user)
         } catch (error) {
             console.log(error)
             res.status(500).json({ message: "Internal server error" })
         }
     }
-    static async checkout(req,response){
+    static async checkout(req, response) {
         try {
-            const userId=req.user.id
+            const userId = req.user.id
             // console.log(req.user)
             const user = User.findById(userId)
-            const totalGem= req.body.totalGem;
+            const totalGem = req.body.totalGem;
 
-            let gross_amount= totalGem*6000;
+            let gross_amount = totalGem * 6000;
             let snap = new midtransClient.Snap({
-                isProduction : false,
-                serverKey : 'SB-Mid-server-Eu_prUEDontUM8Xy5RcFUqd6'
+                isProduction: false,
+                serverKey: 'SB-Mid-server-Eu_prUEDontUM8Xy5RcFUqd6'
             });
-    
+
             let parameter = {
                 "transaction_details": {
-                    "order_id": "YOUR-ORDERID"+ Math.floor(100000 + Math.random()*9000000),
+                    "order_id": "YOUR-ORDERID" + Math.floor(100000 + Math.random() * 9000000),
                     "gross_amount": gross_amount
                 },
-                "credit_card":{
-                    "secure" : true
+                "credit_card": {
+                    "secure": true
                 },
                 "customer_details": {
                     "email": user.email,
                 }
             };
-    
-            const midtransToken= await snap.createTransaction(parameter)
-            
+
+            const midtransToken = await snap.createTransaction(parameter)
+
             response.status(201).json(midtransToken)
-    
+
         } catch (error) {
             console.log(error);
         }
     }
-    static async leaderBoard(req,res){
+    static async leaderBoard(req, res) {
         try {
-            const leaderBoard= await User.leaderBoard()
-            res.status(200).json(leaderBoard)      
+            const leaderBoard = await User.leaderBoard()
+            res.status(200).json(leaderBoard)
         } catch (error) {
             console.log(error)
-            res.status(500).json({message:"Internal server error"})
+            res.status(500).json({ message: "Internal server error" })
         }
     }
 
-    static async addGem(req,res){
+    static async addGem(req, res) {
         try {
-            
+            const userId  = req.user.id
+            console.log(userId)
+            const { gem } = req.body
+            const user = User.findById(userId)
+            if (!user) {
+                throw { message: "User not found" }
+            }
+            await User.update(userId, {
+                gem: gem,
+            })
+            res.status(200).json({ message: "Succed update gem" })
         } catch (error) {
-            
+            console.log(error)
+            if (error.message === "User not found") {
+                console.log(error)
+                res.status(404).json({ message: error.message })
+            }
+            res.status(500).json({ message: "Internal server error" })
         }
     }
-    
+
 
 }
 
