@@ -53,17 +53,25 @@ class FriendController {
         try {
             const userId = req.user.id
             const friends = await Friend.invitationFriend(userId);
-            console.log(userId)
             const user = await User.findAll()
             const friend = friends.map(el => {
                 const result = user.find(({ id }) => id === el.friendId)
+                // console.log(result, 'ini dia bro');
+                if(!result) {
+                    throw {status: 404, message: "Not Found"}
+                }
                 return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
             })
-            console.log(friend)
+            // console.log("INI TEST")
+            // console.log(friend)
             res.status(200).json(friend);
         } catch (error) {
-            console.log(error)
-            res.status(500).json(error);
+            if(error.status) {
+                res.status(error.status).json({message: error.message})
+            }else {
+                console.log(error)
+                res.status(500).json(error);
+            }
         }
     }
 
@@ -88,9 +96,9 @@ class FriendController {
     static async acceptFriend(req,res){
         try {
             const id = req.params.id
-            console.log(id)
+            console.log(id, 'INI BROOo')
             const data = await Friend.friendId(id)
-            console.log(data)
+            console.log(data, 'INI DATA BROOo')
              await Friend.acceptFriend(id,{
                     isFriend:true,
                     status:true
