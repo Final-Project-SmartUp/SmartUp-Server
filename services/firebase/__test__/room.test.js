@@ -24,7 +24,6 @@ describe("POST /Create rooms", () => {
                 const { body, status } = res;
                 expect(status).toBe(201);
                 expect(body).toHaveProperty("id", expect.any(String));
-                console.log(body.id,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<< ini body")
                 userId = body.id;
                 expect(body).toHaveProperty("username", expect.any(String));
                 expect(body).toHaveProperty("email", expect.any(String));
@@ -44,7 +43,7 @@ describe("POST /Create rooms", () => {
                 return done();
             });
     }, 30000);
-    console.log(userId,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
+
     test("201 success Create room", (done) => {
         request(app)
             .post(`/rooms/createRoom/${userId}`)
@@ -67,7 +66,6 @@ describe("POST /Create rooms", () => {
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
-                console.log(body,response)
                 expect(status).toBe(200);
                 expect(Array.isArray(body)).toBeTruthy();
 
@@ -130,6 +128,7 @@ describe("GET /rooms/byId", () => {
             });
     });
 
+
     test("401 get rooms with invalid token", (done) => {
         request(app)
             .get(`/rooms/${idRoom}`)
@@ -159,6 +158,59 @@ describe("GET /rooms/byId", () => {
                 done(err);
             });
     });
+
+
 });
+describe("GET /rooms/byId", () => {
+    test("200 success get room", (done) => {
+        request(app)
+            .get(`/rooms/${idRoom}`)
+            .set("access_token", validToken)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);
+                expect(body).toHaveProperty("isEnded", expect.any(Boolean));
+                expect(body).toHaveProperty("player2");
+                expect(body).toHaveProperty("player1");
+                expect(body).toHaveProperty("id", expect.any(String));
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+
+    test("200 success  PUT ROOM", (done) => {
+        request(app)
+            .put(`/rooms/${idRoom}`)
+            .set("access_token", validToken)
+            .send('userId', userId)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);      
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+    test("200 success  DELETE ROOM", (done) => {
+        request(app)
+            .delete(`/rooms/${idRoom}`)
+            .set("access_token", validToken)
+            .send('userId', userId)
+            .then((response) => {
+                const { body, status } = response;
+                expect(status).toBe(200);      
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+});
+
+
+
 
 
