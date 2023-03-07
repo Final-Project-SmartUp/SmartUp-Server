@@ -38,6 +38,7 @@ class CategoryController {
                 id: categoryId,
                 name: category.name,
                 value: category.value,
+                imageUrl: category.imgUrl,
             });
         } catch (err) {
             next(err);
