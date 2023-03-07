@@ -89,7 +89,7 @@ class UserController {
                 throw { status: 400, message: "Password is required" }
             }
             const user = await User.findByEmail(email)
-            
+
             const comparedPassword = comparePasswordBcrypt(
                 password,
                 user.password
@@ -121,18 +121,12 @@ class UserController {
             const { userId } = req.params
 
             const user = User.findById(userId)
-            if (!user) {
-                throw { message: "User not found" }
-            }
+
             await User.update(userId, {
                 isPlaying: true,
             })
             res.status(200).json({ message: "Succed update" })
         } catch (error) {
-            console.log(error, "INI ERROR")
-            if (error.message === "User not found") {
-                res.status(404).json({ message: error.message })
-            }
             res.status(500).json({ message: "Internal server error" })
         }
     }
@@ -203,19 +197,13 @@ class UserController {
             console.log(userId)
             const { gem } = req.body
             const user = User.findById(userId)
-            if (!user) {
-                throw { message: "User not found" }
-            }
+            
             await User.update(userId, {
                 gem: gem,
             })
             res.status(200).json({ message: "Succed update gem" })
         } catch (error) {
             console.log(error)
-            if (error.message === "User not found") {
-                console.log(error)
-                res.status(404).json({ message: error.message })
-            }
             res.status(500).json({ message: "Internal server error" })
         }
     }

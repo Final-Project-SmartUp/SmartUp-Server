@@ -11,6 +11,7 @@ const user1 = {
 };
 
 let userId;
+let validToken;
 
 describe("User Routes Test", () => {
   describe("POST users/register - create new user", () => {
@@ -118,7 +119,7 @@ describe("User Routes Test", () => {
         .end((err, res) => {
           if (err) return done(err);
           const { body, status } = res;
-
+          validToken = body.access_token;
           expect(status).toBe(200);
           expect(body).toHaveProperty("access_token", expect.any(String));
           return done();
@@ -191,6 +192,7 @@ describe("User Routes Test", () => {
         });
     });
   });
+
   describe("GET /Users/:userID - User By Id", () => {
     test("200 Success Get User - should return USER", (done) => {
       request(app)
@@ -228,4 +230,61 @@ describe("User Routes Test", () => {
         }, 50000);
     });
   });
-});
+
+  describe('POST /users/checkoutGem', () => {
+    test('201 Success checkout gem', (done) => {
+      request(app)
+        .post(`/users/checkoutGem`)
+        .set("access_token", validToken)
+        .send({
+          totalGem: 1000
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          // console.log(body, 'ini body dari checkout');
+          // console.log(status, 'ini status dari checkout');
+          expect(status).toBe(201);
+          expect(body).toHaveProperty("token");
+          expect(body).toHaveProperty("redirect_url");
+          return done();
+        }, 50000);
+    });
+  })
+
+  describe('GET /users/leaderboard', () => {
+    test('GET /users/leaderboard', (done) => {
+      request(app)
+        .get(`/users/leaderboard`)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          console.log(body, 'ini body dari leaderboard');
+          console.log(status, 'ini status dari leaderboard');
+          expect(status).toBe(200);
+          expect(Array.isArray(body)).toBeTruthy();
+          return done();
+        }, 50000);
+    })
+  })
+
+  describe('PATCH /users/updateGem', () => {
+    test('PATCH /users/updateGem', (done) => {
+      request(app)
+        .patch(`/users/updateGem`)
+        .set("access_token", validToken)
+        .send({
+          gem: 1000
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          console.log(body, 'ini body dari leaderboard');
+          console.log(status, 'ini status dari leaderboard');
+          expect(status).toBe(200);
+          expect(Array.isArray(body));
+          return done();
+        }, 50000);
+    })
+  })
+})
