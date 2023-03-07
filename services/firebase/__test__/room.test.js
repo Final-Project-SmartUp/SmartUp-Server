@@ -66,6 +66,7 @@ describe("POST /Create rooms", () => {
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
+                // console.log(body,response)
                 expect(status).toBe(200);
                 expect(Array.isArray(body)).toBeTruthy();
 

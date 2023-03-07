@@ -7,14 +7,8 @@ const midtransClient = require('midtrans-client');
 class UserController {
     static async getAllUsers(req, res) {
         try {
-            let cacheUser = await redis.get("users");
-            if (cacheUser) {
-                return res.status(200).json(JSON.parse(cacheUser));
-            } else {
-                const arrayDataofUsers = await User.findAll()
-                res.status(200).json(arrayDataofUsers)
-                redis.set("users", JSON.stringify(arrayDataofUsers))
-            }
+            const arrayDataofUsers = await User.findAll()
+            res.status(200).json(arrayDataofUsers)
         } catch (err) {
             res.status(500).json(err)
         }
@@ -23,9 +17,7 @@ class UserController {
         try {
             const { userId } = req.params
             const user = await User.findById(userId)
-            if (!user) {
-                throw { status: 404, message: "User not found" }
-            }
+
             res.status(200).json(user)
         } catch (err) {
             if (err.status) {
@@ -75,7 +67,7 @@ class UserController {
             })
         } catch (err) {
             if (err.message === "Username already registered" || err.message === "Email already registered") {
-             
+
                 res.status(400).json({ message: err.message })
             } else if (err.message === "Email are required") {
                 res.status(400).json({ message: err.message })
@@ -97,9 +89,7 @@ class UserController {
                 throw { status: 400, message: "Password is required" }
             }
             const user = await User.findByEmail(email)
-            if (!user) {
-                throw { status: 401, message: "Invalid email/password" }
-            }
+            
             const comparedPassword = comparePasswordBcrypt(
                 password,
                 user.password
@@ -209,7 +199,7 @@ class UserController {
 
     static async addGem(req, res) {
         try {
-            const userId  = req.user.id
+            const userId = req.user.id
             console.log(userId)
             const { gem } = req.body
             const user = User.findById(userId)
