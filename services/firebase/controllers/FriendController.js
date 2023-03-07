@@ -40,7 +40,7 @@ class FriendController {
             const friends = await Friend.findAll(userId);
             const user = await User.findAll();
             const friend = friends.map(el => {
-                const result = user.find(({ id }) => id === el.friendId)
+                const result = user.find(({ id }) => id === el.userId)
                 return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
             })
 
