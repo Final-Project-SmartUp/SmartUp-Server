@@ -59,7 +59,7 @@ class UserController {
                 gem: 0,
                 image: 'https://png.pngtree.com/png-clipart/20201224/ourmid/pngtree-cartoon-avatar-funny-avatar-man-avatar-exaggerated-avatar-png-image_2625097.jpg'
             })
-            await redis.del("users")
+           
             res.status(201).json({
                 id: newUser._path.segments[1],
                 username,
@@ -153,6 +153,9 @@ class UserController {
             // console.log(req.user)
             const user = User.findById(userId)
             const totalGem = req.body.totalGem;
+            if(!totalGem){
+                throw {message: "Total gem is required"}
+            }
 
             let gross_amount = totalGem * 6000;
             let snap = new midtransClient.Snap({
@@ -178,6 +181,7 @@ class UserController {
             response.status(201).json(midtransToken)
 
         } catch (error) {
+            response.status(500).json({ message: "Internal server error" })
             console.log(error);
         }
     }
@@ -197,7 +201,9 @@ class UserController {
             console.log(userId)
             const { gem } = req.body
             const user = User.findById(userId)
-            
+            if(!gem){
+                throw {message: "Gem is required"}
+            }
             await User.update(userId, {
                 gem: gem,
             })

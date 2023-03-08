@@ -2,17 +2,41 @@ const app = require('../app');
 const request = require('supertest');
 const { Friend } = require('../models/Friend');
 
-let r = (Math.random() + 1).toString(36).substring(7);
-
-const user1 = {
-    username: r,
-    email: `${r}@mail.com`,
-    password: "usertest",
-};
 let invalidToken = "dsakdmsas";
-let validToken;
+let validToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkZsWHN5SnVveHdtc2l4MmxsOE04IiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgxOTc2ODF9.GbF4LgW2jgSMhC2HaCHyGE2hT2sUyt2DjV2KbwlfT2E";
 let idRoom;
 let userId;
+
+describe("GET /friends", () => {
+    test("200 success Get all friends", (done) => {
+        request(app)
+            .get(`/friends`)
+            .set("access_token", validToken)
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, "ini body milik get all friends");
+                expect(status).toBe(200);
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+    
+    test("401 fail Get all friends invalid token", (done) => {
+        request(app)
+            .get(`/friends`)
+            .set("access_token", invalidToken)
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, "ini body milik get all friends");
+                expect(status).toBe(401);
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
 
     test("404 success get friend invitation", (done) => {
         request(app)
@@ -44,41 +68,14 @@ let userId;
             });
     });
 
-describe("POST /Create rooms", () => {
-    test("201 Success register - should create new User", (done) => {
+    test("200 success get request friend", (done) => {
         request(app)
-            .post("/users/register")
-            .send(user1)
-            .end((err, res) => {
-                if (err) return done(err);
-                const { body, status } = res;
-                expect(status).toBe(201);
-                expect(body).toHaveProperty("id", expect.any(String));
-                userId = body.id;
-                expect(body).toHaveProperty("username", expect.any(String));
-                expect(body).toHaveProperty("email", expect.any(String));
-                return done();
-            });
-    }, 30000);
-    test("200 Success login - should return access_token", (done) => {
-        request(app)
-            .post("/users/login")
-            .send(user1)
-            .end((err, res) => {
-                if (err) return done(err);
-                const { body, status } = res;
-                validToken = body.access_token;
-                expect(status).toBe(200);
-                expect(body).toHaveProperty("access_token", expect.any(String));
-                return done();
-            });
-    }, 30000);
-    test("200 success Create room", (done) => {
-        request(app)
-            .get(`/friends`)
+            .get(`/friends/requestFriend`)
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
+                console.log(body, "ini body milik get request friend");
+                console.log(status, "ini status milik get request friend");
                 expect(status).toBe(200);
                 done();
             })
@@ -86,15 +83,67 @@ describe("POST /Create rooms", () => {
                 done(err);
             });
     });
-    test("201 Add Friend ", (done) => {
+
+    test("201 success add friend", (done) => {
         request(app)
-            .post("/friends/87151bnZ2Pkhxe9D2UFF")
+            .post(`/friends/36dZHKhAIUuNbINuZxdr`)
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
+                console.log(body, "ini body milik add friend");
+                expect(status).toBe(201);
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+
+    
+});
+
+describe("PUT /friends", () => {
+    test("201 Add Friend ", (done) => {
+        request(app)
+            .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .set("access_token", validToken)
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, "ini body milik add friend");
                 expect(status).toBe(201);
                 // expect(Array.isArray(body)).toBeTruthy();
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
 
+    test("401 Add Friend with invalid token", (done) => {
+        request(app)
+            .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .set("access_token", invalidToken)
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, "ini body milik add friend");
+                expect(status).toBe(401);
+                // expect(Array.isArray(body)).toBeTruthy();
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+
+    test("401 Add Friend without token", (done) => {
+        request(app)
+            .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .set("access_token", null)
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, "ini body milik add friend");
+                expect(status).toBe(401);
+                // expect(Array.isArray(body)).toBeTruthy();
                 done();
             })
             .catch((err) => {

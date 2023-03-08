@@ -96,7 +96,6 @@ class FriendController {
     static async acceptFriend(req,res){
         try {
             const id = req.params.id
-            console.log(id, 'INI BROOo')
             const data = await Friend.friendId(id)
             console.log(data, 'INI DATA BROOo')
              await Friend.acceptFriend(id,{
