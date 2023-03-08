@@ -98,3 +98,17 @@ describe("GET /categories/:id", () => {
     });
 });
 
+describe("MOCKING", () => {
+    test("should response with status 500 fail add post", async () => {
+        jest.spyOn(Category, 'findAll').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const response = await request(app).get("/categories").set("access_token", access_token);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body.message).toEqual('Internal server error')
+    });
+});
+

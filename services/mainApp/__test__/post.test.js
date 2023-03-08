@@ -200,6 +200,28 @@ console.log(detail, 'INI BABI OLONYA');
             });
     });
 
+    test("should return 404 status code success get detail", (done) => {
+        request(app)
+            .get(`/posts/postDetail/404`)
+            .set('access_token', access_token)
+            .then((response) => {
+                console.log(response.body);
+                const { body, status } = response;
+                console.log(body,'ini response get detail');
+                expect(status).toBe(404);
+                // expect(body[0]).toHaveProperty("id", expect.any(Number));
+                // expect(body[0]).toHaveProperty("title", expect.any(String));
+                // expect(body[0]).toHaveProperty("description", expect.any(String));
+                // expect(body[0]).toHaveProperty("UserId", expect.any(String));
+                // expect(body[0]).toHaveProperty("CategoryId", expect.any(Number));
+                // expect(body[0]).toHaveProperty("Comments", expect.any(Array));
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+
     test("should return 201 status code success created for delete it later ", (done) => {
         request(app)
             .post("/posts")
@@ -397,42 +419,48 @@ describe("DELETE /posts", () => {
     });
 });
 
-// describe("MOCKING", () => {
-//     test("should response with status 500 fail add comment", async () => {
-//         jest.spyOn(Comment, 'create').mockImplementation(() => {
-//           throw new Error('Something went wrong');
-//       });
-//       const data = {
-//         PostId: 1,
-//         description: "ini berhasil di buat mock",
-//         UserId: "UnGLKHmdM9fuowSyQu4U",
-//         profileName: "Gilang",
-//       }
-//       const response = await request(app).post("/comments").set("access_token", access_token).send(data);
-//     //   console.log("INI DIA COK MOCK");
-//     //   console.log(response.body);
-//     //   console.log(response.status);
-//       expect(response.status).toBe(500);
-//       expect(response.body.message).toEqual('Internal server error')
-//     });
+describe("MOCKING", () => {
+    test("should response with status 500 fail add post", async () => {
+        jest.spyOn(Post, 'create').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const data = {
+        title: "ini berhasil di cek detail",
+        description: "ini berhasil di buat untuk deskripsi detail",
+        userId: "UnGLKHmdM9fuowSyQu4U", 
+        categoryId: 1,
+      }
+      const response = await request(app).post("/posts").set("access_token", access_token).send(data);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body.message).toEqual('Internal server error')
+    });
 
-//     test("should response with status 500 fail edit comment", async () => {
-//         jest.spyOn(Comment, 'update').mockImplementation(() => {
-//           throw new Error('Something went wrong');
-//       });
-//       const data = {
-//         PostId: 1,
-//         description: "ini berhasil di buat mock",
-//         UserId: "UnGLKHmdM9fuowSyQu4U",
-//         profileName: "Gilang",
-//       }
-//       const response = await request(app).put("/comments/999").set("access_token", access_token).send(data);
-//     //   console.log("INI DIA COK MOCK");
-//     //   console.log(response.body);
-//     //   console.log(response.status);
-//       expect(response.status).toBe(404);
-//       expect(response.body.message).toEqual('Comment not found')
-//     });
-// });
+    test("should response with status 500 fail get All post with certain category", async () => {
+        jest.spyOn(Post, 'findAll').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const response = await request(app).get("/posts/999").set("access_token", access_token);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body.message).toEqual('Internal server error')
+    });
+
+    test("should response with status 500 fail get post by id", async () => {
+        jest.spyOn(Post, 'findOne').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const response = await request(app).get("/posts/postDetail/1").set("access_token", access_token);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body.message).toEqual('Internal server error')
+    });
+});
 
 
