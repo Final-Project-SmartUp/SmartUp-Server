@@ -56,27 +56,27 @@ class FriendController {
         }
     }
 
-    static async invitationFriend(req, res) {
-        try {
-            const us=req.body.us
-            if(us){
-                throw { message: "Not Found"}
-            }
-            const userId = req.user.id
-            const friends = await Friend.invitationFriend(userId);
-            const user = await User.findAll()
-            const friend = friends.map(el => {
-                const result = user.find(({ id }) => id === el.friendId)
-                // console.log(result, 'ini dia bro');
+    // static async invitationFriend(req, res) {
+    //     try {
+    //         const us=req.body.us
+    //         if(us){
+    //             throw { message: "Not Found"}
+    //         }
+    //         const userId = req.user.id
+    //         const friends = await Friend.invitationFriend(userId);
+    //         const user = await User.findAll()
+    //         const friend = friends.map(el => {
+    //             const result = user.find(({ id }) => id === el.friendId)
+    //             // console.log(result, 'ini dia bro');
                 
-                return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
-            })
-            res.status(200).json(friend);
-        } catch (error) {
-                res.status(500).json(error);
+    //             return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
+    //         })
+    //         res.status(200).json(friend);
+    //     } catch (error) {
+    //             res.status(500).json(error);
             
-        }
-    }
+    //     }
+    // }
 
     static async requestFriend(req, res) {
         try {

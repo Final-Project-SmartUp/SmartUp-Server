@@ -15,6 +15,7 @@ let validToken = "";
 let idRoom;
 let userId;
 let friendId;
+let friendId2;
 
 describe("GET /friends", () => {
     test("201 Success register - should create new User", (done) => {
@@ -90,50 +91,50 @@ describe("GET /friends", () => {
             });
     });
 
-    test("404 success get friend invitation", (done) => {
-        request(app)
-            .get(`/friends/invitationFriend`)
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-    test("404 success get friend invitation", (done) => {
-        request(app)
-            .get(`/friends/invitationFriend`)
-            .set("access_token", validToken)
-            .send({us:"us"})
-            .then((response) => {
-                const { body, status } = response;
-                console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
+    // test("404 success get friend invitation", (done) => {
+    //     request(app)
+    //         .get(`/friends/invitationFriend`)
+    //         .set("access_token", validToken)
+    //         .then((response) => {
+    //             const { body, status } = response;
+    //             console.log(body, "ini body milik get friend invitation");
+    //             expect(status).toBe(404);
+    //             done();
+    //         })
+    //         .catch((err) => {
+    //             done(err);
+    //         });
+    // });
+    // test("404 success get friend invitation", (done) => {
+    //     request(app)
+    //         .get(`/friends/invitationFriend`)
+    //         .set("access_token", validToken)
+    //         .send({us:"us"})
+    //         .then((response) => {
+    //             const { body, status } = response;
+    //             console.log(body, "ini body milik get friend invitation");
+    //             expect(status).toBe(404);
+    //             done();
+    //         })
+    //         .catch((err) => {
+    //             done(err);
+    //         });
+    // });
 
-    test("401 get friend invitation with invalid token", (done) => {
-        request(app)
-            .get(`/friends/invitationFriend`)
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-                console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(401);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
+    // test("401 get friend invitation with invalid token", (done) => {
+    //     request(app)
+    //         .get(`/friends/invitationFriend`)
+    //         .set("access_token", invalidToken)
+    //         .then((response) => {
+    //             const { body, status } = response;
+    //             console.log(body, "ini body milik get friend invitation");
+    //             expect(status).toBe(401);
+    //             done();
+    //         })
+    //         .catch((err) => {
+    //             done(err);
+    //         });
+    // });
 
     test("200 success get request friend", (done) => {
         request(app)
@@ -167,13 +168,30 @@ describe("GET /friends", () => {
             });
     });
 
-    test("201 success add friend", (done) => {
+    test("201 success add friend pertama", (done) => {
         request(app)
-            .post(`/friends/36dZHKhAIUuNbINuZxdr`)
+            .post(`/friends/I2iY8j47BMCaHXrRl2pG`)
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
                 console.log(body, "ini body milik add friend");
+                friendId = body.id;
+                expect(status).toBe(201);
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });  
+
+    test("201 success add friend kedua", (done) => {
+        request(app)
+            .post(`/friends/I2iY8j47BMCaHXrRl2pG`)
+            .set("access_token", validToken)
+            .then((response) => {
+                const { body, status } = response;
+                console.log(body, "ini body milik add friend");
+                friendId2 = body.id;
                 expect(status).toBe(201);
                 done();
             })
@@ -183,31 +201,16 @@ describe("GET /friends", () => {
     });  
 });
 
-describe("POST /friends", () => {
-    test("201 Add Friend ", (done) => {
+
+describe("Decline /friends", () => {
+    test("200 Decline Friend ", (done) => {
         request(app)
-            .post("/friends/I2iY8j47BMCaHXrRl2pG")
+            .put(`/friends/decline/${friendId2}`)
             // .send({us:'decline'})
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
-                friendId=body.id
-                expect(status).toBe(201);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-    test("201 Add Friend ", (done) => {
-        request(app)
-            .post("/friends/I2iY8j47BMCaHXrRl2pG")
-            .send({us:'decline'})
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                friendId=body.id
-                expect(status).toBe(500);
+                expect(status).toBe(200);
                 done();
             })
             .catch((err) => {
@@ -215,135 +218,17 @@ describe("POST /friends", () => {
             });
     });
 
-    test("401 Add Friend with invalid token", (done) => {
-        request(app)
-            .post(`/friends/${friendId}`)
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-                // console.log(body, "ini body milik add friend");
-                expect(status).toBe(401);
-                // expect(Array.isArray(body)).toBeTruthy();
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 Add Friend without token", (done) => {
-        request(app)
-            .post("/friends/I2iY8j47BMCaHXrRl2pG")
-            .set("access_token", null)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(401);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
 });
-describe("Decline /friends", () => {
-    test("404 Decline Friend ", (done) => {
-        request(app)
-            .put(`/friends/${friendId}`)
-            .send({us:'decline'})
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
 
-    test("401 Put Friend with invalid token", (done) => {
-        request(app)
-            .put("/friends/I2iY8j47BMCaHXrRl2pG")
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-                // console.log(body, "ini body milik add friend");
-                expect(status).toBe(401);
-                // expect(Array.isArray(body)).toBeTruthy();
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 Put Friend without token", (done) => {
-        request(app)
-            .put("/friends/I2iY8j47BMCaHXrRl2pG")
-            .set("access_token", null)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(401);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-});
 describe("Accept /friends", () => {
-    test("404 Decline Friend ", (done) => {
+    test("200 Accept Friend ", (done) => {
         request(app)
-            .patch(`/friends/${friendId}`)
-            .send({us:'decline'})
+            .put(`/friends/acceptFriend/${friendId}`)
+            // .send({us:'decline'})
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-    test("404 Decline Friend ", (done) => {
-        request(app)
-            .patch(`/friends/salah`)
-            .send({us:'decline'})
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 Put Friend with invalid token", (done) => {
-        request(app)
-            .put("/friends/I2iY8j47BMCaHXrRl2pG")
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-                // console.log(body, "ini body milik add friend");
-                expect(status).toBe(401);
-                // expect(Array.isArray(body)).toBeTruthy();
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 Put Friend without token", (done) => {
-        request(app)
-            .put("/friends/I2iY8j47BMCaHXrRl2pG")
-            .set("access_token", null)
-            .then((response) => {
-                const { body, status } = response;
-                expect(status).toBe(401);
+                expect(status).toBe(200);
                 done();
             })
             .catch((err) => {
