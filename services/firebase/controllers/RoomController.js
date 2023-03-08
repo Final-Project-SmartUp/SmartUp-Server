@@ -22,7 +22,7 @@ class RoomController {
     }
     static async createRoom(req, res) {
         try {
-            const categoryId = req.body.categoryId
+            const categoryId = req.body.categoryId;
             const { userId } = req.params;
             const newRoom = await Room.create({
                 player1: userId,
@@ -30,9 +30,9 @@ class RoomController {
                 isEnded: false,
                 scorePlayer1: 0,
                 scorePlayer2: 0,
-                category: categoryId
+                category: categoryId,
             });
-            await redis.del("rooms")
+            await redis.del("rooms");
             res.status(201).json({
                 id: newRoom._path.segments[1],
                 player1: userId,
@@ -40,7 +40,7 @@ class RoomController {
                 isEnded: false,
                 scorePlayer1: 0,
                 scorePlayer2: 0,
-                category: categoryId
+                category: categoryId,
             });
         } catch (err) {
             res.status(500).json(err);
