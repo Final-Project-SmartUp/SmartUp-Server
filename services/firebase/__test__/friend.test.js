@@ -14,37 +14,7 @@ let validToken;
 let idRoom;
 let userId;
 
-    test("404 success get friend invitation", (done) => {
-        request(app)
-            .get(`/friends/invitationFriend`)
-            .set("access_token", validToken)
-            .then((response) => {
-                const { body, status } = response;
-                console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(404);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("401 get friend invitation with invalid token", (done) => {
-        request(app)
-            .get(`/friends/invitationFriend`)
-            .set("access_token", invalidToken)
-            .then((response) => {
-                const { body, status } = response;
-                console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(401);
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-describe("POST /Create rooms", () => {
+describe("TESTING /rooms", () => {
     test("201 Success register - should create new User", (done) => {
         request(app)
             .post("/users/register")
@@ -101,6 +71,8 @@ describe("POST /Create rooms", () => {
                 done(err);
             });
     });
+
+    
 });
 
 

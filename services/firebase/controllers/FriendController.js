@@ -49,31 +49,31 @@ class FriendController {
         }
     }
 
-    static async invitationFriend(req, res) {
-        try {
-            const userId = req.user.id
-            const friends = await Friend.invitationFriend(userId);
-            const user = await User.findAll()
-            const friend = friends.map(el => {
-                const result = user.find(({ id }) => id === el.friendId)
-                // console.log(result, 'ini dia bro');
-                if(!result) {
-                    throw {status: 404, message: "Not Found"}
-                }
-                return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
-            })
-            // console.log("INI TEST")
-            // console.log(friend)
-            res.status(200).json(friend);
-        } catch (error) {
-            if(error.status) {
-                res.status(error.status).json({message: error.message})
-            }else {
-                console.log(error)
-                res.status(500).json(error);
-            }
-        }
-    }
+    // static async invitationFriend(req, res) {
+    //     try {
+    //         const userId = req.user.id
+    //         const friends = await Friend.invitationFriend(userId);
+    //         const user = await User.findAll()
+    //         const friend = friends.map(el => {
+    //             const result = user.find(({ id }) => id === el.friendId)
+    //             // console.log(result, 'ini dia bro');
+    //             if(!result) {
+    //                 throw {status: 404, message: "Not Found"}
+    //             }
+    //             return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id }
+    //         })
+    //         // console.log("INI TEST")
+    //         // console.log(friend)
+    //         res.status(200).json(friend);
+    //     } catch (error) {
+    //         if(error.status) {
+    //             res.status(error.status).json({message: error.message})
+    //         }else {
+    //             console.log(error)
+    //             res.status(500).json(error);
+    //         }
+    //     }
+    // }
 
     static async requestFriend(req, res) {
         try {
