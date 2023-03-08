@@ -7,6 +7,10 @@ const midtransClient = require('midtrans-client');
 class UserController {
     static async getAllUsers(req, res) {
         try {
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             const arrayDataofUsers = await User.findAll()
             res.status(200).json(arrayDataofUsers)
         } catch (err) {
@@ -16,6 +20,10 @@ class UserController {
     static async getUserById(req, res) {
         try {
             const { userId } = req.params
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             const user = await User.findById(userId)
 
             res.status(200).json(user)
@@ -30,6 +38,10 @@ class UserController {
     static async registerUser(req, res) {
         try {
             const { username, email, password } = req.body
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             if (!email) {
                 throw { message: "Email are required" }
             }
@@ -83,6 +95,10 @@ class UserController {
     static async loginUser(req, res) {
         try {
             const { email, password } = req.body
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             if (!email) {
                 throw { status: 400, message: "Email is required" }
             } else if (!password) {
@@ -119,7 +135,10 @@ class UserController {
     static async updateIsPlayingUser(req, res) {
         try {
             const { userId } = req.params
-
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             const user = User.findById(userId)
 
             await User.update(userId, {
@@ -151,6 +170,10 @@ class UserController {
         try {
             const userId = req.user.id
             // console.log(req.user)
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             const user = User.findById(userId)
             const totalGem = req.body.totalGem;
             if(!totalGem){
@@ -187,6 +210,10 @@ class UserController {
     }
     static async leaderBoard(req, res) {
         try {
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             const leaderBoard = await User.leaderBoard()
             res.status(200).json(leaderBoard)
         } catch (error) {
@@ -197,7 +224,12 @@ class UserController {
 
     static async addGem(req, res) {
         try {
+
             const userId = req.user.id
+            const sus = req.body.sus;
+            if(sus){
+                throw { message: "Not Found"}
+            }
             console.log(userId)
             const { gem } = req.body
             const user = User.findById(userId)

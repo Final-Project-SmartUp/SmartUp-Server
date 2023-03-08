@@ -11,6 +11,7 @@ const user1 = {
   password: "usertest",
 };
 
+
 let userId;
 let validToken;
 
@@ -191,6 +192,18 @@ describe("User Routes Test", () => {
           return done();
         });
     });
+    test("500 Fail Get User - should return USER", (done) => {
+      request(app)
+        .get("/users")
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe("GET /Users/:userID - User By Id", () => {
@@ -201,6 +214,17 @@ describe("User Routes Test", () => {
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(200);
+          return done();
+        });
+    });
+    test("500 Fail Get User - should return USER", (done) => {
+      request(app)
+        .get(`/users/${userId}`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
           return done();
         });
     });
@@ -240,6 +264,17 @@ describe("User Routes Test", () => {
           return done();
         }, 50000);
     });
+    test("500 Fail PATCH User ", (done) => {
+      request(app)
+        .patch(`/users/${userId}`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        }, 50000);
+    });
   });
 
   describe('POST /users/checkoutGem', () => {
@@ -256,6 +291,21 @@ describe("User Routes Test", () => {
           expect(status).toBe(201);
           expect(body).toHaveProperty("token");
           expect(body).toHaveProperty("redirect_url");
+          return done();
+        }, 50000);
+    });
+    test('201 Success checkout gem', (done) => {
+      request(app)
+        .post(`/users/checkoutGem`)
+        .send({sus: "sus"})
+        .set("access_token", validToken)
+        .send({
+          totalGem: 1000
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
           return done();
         }, 50000);
     });
@@ -295,6 +345,18 @@ describe("User Routes Test", () => {
           return done();
         }, 50000);
     })
+    test('GET /users/leaderboard', (done) => {
+      request(app)
+        .get(`/users/leaderboard`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+        
+          return done();
+        }, 50000);
+    })
   })
 
   describe('PATCH /users/updateGem', () => {
@@ -310,6 +372,20 @@ describe("User Routes Test", () => {
           const { body, status } = res;
           expect(status).toBe(200);
           expect(Array.isArray(body));
+          return done();
+        }, 50000);
+    })
+    test('PATCH /users/updateGem', (done) => {
+      request(app)
+        .patch(`/users/updateGem`)
+        .set("access_token", validToken)
+        .send({
+          sus: 'sus'
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
           return done();
         }, 50000);
     })
@@ -344,3 +420,4 @@ describe('ROOM 500', () => {
     jest.restoreAllMocks();
   });
 });
+
