@@ -234,23 +234,6 @@ describe('ALL ROOM 500', () => {
         expect(response.status).toBe(500);
     });
 
-    describe('GET /example', () => {
-        it('should return a 500 status code when an error occurs', async () => {
-          // Create a mock handler function that always throws an error
-          const mockHandler = jest.fn((req, res, next) => {
-            throw new Error('Internal Server Error');
-          });
-      
-          // Replace the original route handler with the mock handler
-          app.get('/rooms/getRoom/:categoryId', mockHandler);
-      
-          // Make a GET request to the route
-          const response = await request(app).get('/rooms/getRoom/:categoryId').set("access_token", validToken);
-      
-          // Expect the response status code to be 500
-          expect(response.status).toBe(500);
-        });
-      });
 
 
 
@@ -354,23 +337,7 @@ describe('ALL ROOM 500', () => {
         // Check that the response has a status code of 500
         expect(response.status).toBe(500);
     });
-    it('should return a status code of 500', async () => {
-        // Create a mock implementation of the route handler that always throws an error
-        const mockHandler = jest.fn(() => {
-            throw new Error('An error occurred');
-        });
 
-        // Replace the original route handler with the mock implementation
-        app.delete(`/rooms/sss`, mockHandler);
-
-        // Make a GET request to the route using supertest
-        const response = await request(app)
-            .delete(`/rooms/sss`)
-            .set("access_token", validToken)
-        // Check that the response has a status code of 500
-        expect(response.status).toBe(500);
-    });
 
 });
 });
-

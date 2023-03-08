@@ -24,11 +24,10 @@ class FriendController {
             const newFriend = await Friend.addFriend(payload);
             const newFriend2 = await Friend.addFriend(payload2)
             res.status(201).json({
-                payload,
-                payload2
+                id: newFriend._path.segments[1],
+                id2: newFriend2._path.segments[1]
             });
         } catch (err) {
-            console.log(err)
             res.status(500).json(err);
         }
     }
@@ -88,17 +87,15 @@ class FriendController {
             console.log(friend)
             res.status(200).json(friend);
         } catch (error) {
-            console.log(error)
+        
             res.status(500).json(error);
         }
     }
 
     static async acceptFriend(req,res){
         try {
-            const id = req.params.id
-            console.log(id, 'INI BROOo')
-            const data = await Friend.friendId(id)
-            console.log(data, 'INI DATA BROOo')
+            const id = req.params.id //ini friendID nya yang nampung
+            const data = await Friend.friendId(id)       
              await Friend.acceptFriend(id,{
                     isFriend:true,
                     status:true
@@ -108,8 +105,9 @@ class FriendController {
 
              res.status(200).json({message:'Add Friend Success!'})
         } catch (error) {
-            console.log(error)
-            res.status(500).json(error)
+            if(error.status===404){
+                res.status(500).json(error)
+            }
         }
     }
     static async declineFriend(req,res){

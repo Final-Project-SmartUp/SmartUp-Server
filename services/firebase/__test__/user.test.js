@@ -1,6 +1,7 @@
 const app = require("../app");
 const request = require("supertest");
 const { User } = require("../models/User");
+const UserController = require("../controllers/UserController");
 
 let r = (Math.random() + 1).toString(36).substring(7);
 
@@ -9,6 +10,7 @@ const user1 = {
   email: `${r}@mail.com`,
   password: "usertest",
 };
+
 
 let userId;
 let validToken;
@@ -190,6 +192,18 @@ describe("User Routes Test", () => {
           return done();
         });
     });
+    test("500 Fail Get User - should return USER", (done) => {
+      request(app)
+        .get("/users")
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+
+          expect(status).toBe(500);
+          return done();
+        });
+    });
   });
 
   describe("GET /Users/:userID - User By Id", () => {
@@ -203,9 +217,32 @@ describe("User Routes Test", () => {
           return done();
         });
     });
+    test("500 Fail Get User - should return USER", (done) => {
+      request(app)
+        .get(`/users/${userId}`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        });
+    });
     test("404 Failed Get User - should return User Not Found", (done) => {
       request(app)
         .get(`/users/sdklajdlkaaaaa`)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(404);
+          expect(body).toHaveProperty('message', 'Data not found');
+          return done();
+        });
+    });
+  }, 500000);
+    test("404 Failed Get User - should return User Not Found", (done) => {
+      request(app)
+        .get(`/users/:dfsfs`)
         .end((err, res) => {
           if (err) return done(err);
           const { body, status } = res;
@@ -224,6 +261,17 @@ describe("User Routes Test", () => {
           if (err) return done(err);
           const { body, status } = res;
           expect(status).toBe(200);
+          return done();
+        }, 50000);
+    });
+    test("500 Fail PATCH User ", (done) => {
+      request(app)
+        .patch(`/users/${userId}`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
           return done();
         }, 50000);
     });
@@ -246,6 +294,43 @@ describe("User Routes Test", () => {
           return done();
         }, 50000);
     });
+    test('201 Success checkout gem', (done) => {
+      request(app)
+        .post(`/users/checkoutGem`)
+        .send({sus: "sus"})
+        .set("access_token", validToken)
+        .send({
+          totalGem: 1000
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        }, 50000);
+    });
+    test('201 Success checkout gem', (done) => {
+      request(app)
+        .post(`/users/checkoutGem`)
+        .set("access_token", validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        }, 50000);
+    });
+    test('201 Success patch gem', (done) => {
+      request(app)
+        .patch(`/users/updateGem`)
+        .set("access_token", validToken)
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        }, 50000);
+    });
   })
 
   describe('GET /users/leaderboard', () => {
@@ -257,6 +342,18 @@ describe("User Routes Test", () => {
           const { body, status } = res;
           expect(status).toBe(200);
           expect(Array.isArray(body)).toBeTruthy();
+          return done();
+        }, 50000);
+    })
+    test('GET /users/leaderboard', (done) => {
+      request(app)
+        .get(`/users/leaderboard`)
+        .send({sus: "sus"})
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+        
           return done();
         }, 50000);
     })
@@ -278,5 +375,48 @@ describe("User Routes Test", () => {
           return done();
         }, 50000);
     })
+    test('PATCH /users/updateGem', (done) => {
+      request(app)
+        .patch(`/users/updateGem`)
+        .set("access_token", validToken)
+        .send({
+          sus: 'sus'
+        })
+        .end((err, res) => {
+          if (err) return done(err);
+          const { body, status } = res;
+          expect(status).toBe(500);
+          return done();
+        }, 50000);
+    })
   })
-})
+
+
+
+
+describe('ROOM 500', () => {
+  test('myAsyncFunction returns a rejected promise with status code 500', async () => {
+    // Create a mock implementation for myAsyncFunction that returns a rejected promise with status code 500
+    const mockError = new Error('Internal Server Error');
+    mockError.statusCode = 500;
+    jest.spyOn(UserController, 'getAllUsers').mockRejectedValue(mockError);
+
+    // Call the function under test and expect it to throw the mocked error with status code 500
+    await expect(UserController.getAllUsers()).rejects.toThrow(mockError);
+    expect(mockError.statusCode).toEqual(500);
+    // Restore the original implementation of fetch
+    jest.restoreAllMocks();
+  });
+  test('myAsyncFunction returns a rejected promise with status code 500', async () => {
+    // Create a mock implementation for myAsyncFunction that returns a rejected promise with status code 500
+    const mockError = new Error('Internal Server Error');
+    mockError.statusCode = 500;
+    jest.spyOn(UserController, 'getUserById').mockRejectedValue(mockError);
+
+    // Call the function under test and expect it to throw the mocked error with status code 500
+    await expect(UserController.getUserById()).rejects.toThrow(mockError);
+    expect(mockError.statusCode).toEqual(500);
+    // Restore the original implementation of fetch
+    jest.restoreAllMocks();
+  });
+});

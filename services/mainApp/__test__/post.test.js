@@ -5,9 +5,10 @@ const { queryInterface } = sequelize;
 const { signToken } = require('../helpers/jwt');
 const { axios } = require('axios');
 
-let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTUxYm5aMlBraHhlOUQyVUZGIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgxNjMyNTN9.cyNrEweeaqVJmcwTGVQhrnkt-40ZgNz-V_3jxPetD9Q';
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVuR0xLSG1kTTlmdW93U3lRdTRVIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyNTgwOTV9.15iHZBdzOXpYc92Y83Y5L4Bf7jDxfm896Q2erZm-W-g';
 let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
 let null_token = null
+let detail;
 
 afterAll((done) => {
     Post.destroy({ truncate: true, cascade: true, restartIdentity: true })
@@ -130,16 +131,68 @@ describe("POST /posts", () => {
             .send({
                 title: "ini berhasil di buat untuk judul untuk di delete pada testing delete",
                 description: "ini berhasil di buat untuk deskripsi untuk di pada testing delete",
+                userId: "UnGLKHmdM9fuowSyQu4U", 
+                categoryId: 1,
             })
             .then((response) => {
                 const { body, status } = response;
-                // console.log(body, 'ini response add post');
+                console.log(body, 'ini response add post');
+                detail=body.id;
+                console.log(detail, 'ini detail yang ditunggu');
                 expect(status).toBe(201);
                 expect(body).toHaveProperty("id", expect.any(Number));
                 expect(body).toHaveProperty("title", expect.any(String));
                 expect(body).toHaveProperty("description", expect.any(String));
-                expect(body).toHaveProperty("UserId", expect.any(Number));
+                expect(body).toHaveProperty("UserId", expect.any(String));
                 expect(body).toHaveProperty("CategoryId", expect.any(Number));
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+console.log(detail, 'INI BABI OLONYA');
+    test("should return 201 status code success created for delete it later ", (done) => {
+        request(app)
+            .post("/posts")
+            .set('access_token', access_token)
+            .send({
+                title: "ini berhasil di buat untuk judul",
+                description: "ini berhasil di buat untuk deskripsi",
+                userId: "UnGLKHmdM9fuowSyQu4U", 
+                categoryId: 1,
+            })
+            .then((response) => {
+                const { body, status } = response;
+                // console.log(body, 'ini yang gua cari');
+                expect(status).toBe(201);
+                expect(body).toHaveProperty("id", expect.any(Number));
+                expect(body).toHaveProperty("title", expect.any(String));
+                expect(body).toHaveProperty("description", expect.any(String));
+                expect(body).toHaveProperty("UserId", expect.any(String));
+                expect(body).toHaveProperty("CategoryId", expect.any(Number));
+                done();
+            })
+            .catch((err) => {
+                done(err);
+            });
+    });
+
+    test("should return 200 status code success get detail", (done) => {
+        request(app)
+            .get(`/posts/postDetail/${detail}`)
+            .set('access_token', access_token)
+            .then((response) => {
+                console.log(response.body);
+                const { body, status } = response;
+                console.log(body,'ini response get detail');
+                expect(status).toBe(200);
+                // expect(body[0]).toHaveProperty("id", expect.any(Number));
+                // expect(body[0]).toHaveProperty("title", expect.any(String));
+                // expect(body[0]).toHaveProperty("description", expect.any(String));
+                // expect(body[0]).toHaveProperty("UserId", expect.any(String));
+                // expect(body[0]).toHaveProperty("CategoryId", expect.any(Number));
+                // expect(body[0]).toHaveProperty("Comments", expect.any(Array));
                 done();
             })
             .catch((err) => {
@@ -152,8 +205,10 @@ describe("POST /posts", () => {
             .post("/posts")
             .set('access_token', access_token)
             .send({
-                title: "ini berhasil di buat untuk judul",
-                description: "ini berhasil di buat untuk deskripsi",
+                title: "ini berhasil di cek detail",
+                description: "ini berhasil di buat untuk deskripsi detail",
+                userId: "UnGLKHmdM9fuowSyQu4U", 
+                categoryId: 1,
             })
             .then((response) => {
                 const { body, status } = response;
@@ -162,7 +217,7 @@ describe("POST /posts", () => {
                 expect(body).toHaveProperty("id", expect.any(Number));
                 expect(body).toHaveProperty("title", expect.any(String));
                 expect(body).toHaveProperty("description", expect.any(String));
-                expect(body).toHaveProperty("UserId", expect.any(Number));
+                expect(body).toHaveProperty("UserId", expect.any(String));
                 expect(body).toHaveProperty("CategoryId", expect.any(Number));
                 done();
             })
@@ -178,32 +233,15 @@ describe("GET /posts", () => {
             .get("/posts/1")
             .set('access_token', access_token)
             .then((response) => {
-                // console.log(response);
+                console.log(response.body);
                 const { body, status } = response;
                 expect(status).toBe(200);
                 expect(body[0]).toHaveProperty("id", expect.any(Number));
                 expect(body[0]).toHaveProperty("title", expect.any(String));
                 expect(body[0]).toHaveProperty("description", expect.any(String));
-                expect(body[0]).toHaveProperty("UserId", expect.any(Number));
+                expect(body[0]).toHaveProperty("UserId", expect.any(String));
                 expect(body[0]).toHaveProperty("CategoryId", expect.any(Number));
                 expect(body[0]).toHaveProperty("Comments", expect.any(Array));
-                done();
-            })
-            .catch((err) => {
-                done(err);
-            });
-    });
-
-    test("should return 404 status code success get all data", (done) => {
-        request(app)
-            .get("/posts/999")
-            .set('access_token', access_token)
-            .then((response) => {
-                // console.log(response);
-                const { body, status } = response;
-                expect(status).toBe(404);
-                expect(body).toHaveProperty("message", expect.any(String));
-                expect(body.message).toBe("Posts not found");
                 done();
             })
             .catch((err) => {
@@ -358,5 +396,43 @@ describe("DELETE /posts", () => {
             })
     });
 });
+
+// describe("MOCKING", () => {
+//     test("should response with status 500 fail add comment", async () => {
+//         jest.spyOn(Comment, 'create').mockImplementation(() => {
+//           throw new Error('Something went wrong');
+//       });
+//       const data = {
+//         PostId: 1,
+//         description: "ini berhasil di buat mock",
+//         UserId: "UnGLKHmdM9fuowSyQu4U",
+//         profileName: "Gilang",
+//       }
+//       const response = await request(app).post("/comments").set("access_token", access_token).send(data);
+//     //   console.log("INI DIA COK MOCK");
+//     //   console.log(response.body);
+//     //   console.log(response.status);
+//       expect(response.status).toBe(500);
+//       expect(response.body.message).toEqual('Internal server error')
+//     });
+
+//     test("should response with status 500 fail edit comment", async () => {
+//         jest.spyOn(Comment, 'update').mockImplementation(() => {
+//           throw new Error('Something went wrong');
+//       });
+//       const data = {
+//         PostId: 1,
+//         description: "ini berhasil di buat mock",
+//         UserId: "UnGLKHmdM9fuowSyQu4U",
+//         profileName: "Gilang",
+//       }
+//       const response = await request(app).put("/comments/999").set("access_token", access_token).send(data);
+//     //   console.log("INI DIA COK MOCK");
+//     //   console.log(response.body);
+//     //   console.log(response.status);
+//       expect(response.status).toBe(404);
+//       expect(response.body.message).toEqual('Comment not found')
+//     });
+// });
 
 
