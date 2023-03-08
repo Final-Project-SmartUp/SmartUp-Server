@@ -5,7 +5,7 @@ const { queryInterface } = sequelize;
 const { signToken } = require('../helpers/jwt');
 const { axios } = require('axios');
 
-let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVuR0xLSG1kTTlmdW93U3lRdTRVIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyNTgwOTV9.15iHZBdzOXpYc92Y83Y5L4Bf7jDxfm896Q2erZm-W-g';
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxnNnd4MlQyOHZtd053SHdsZFphIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyODA3MDZ9.iJF76HgqvgOt44jLD9u3bSNtTLA02wzc7u-ln6BWCJ4';
 let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
 let null_token = null
 let detail;

@@ -202,6 +202,7 @@ class UserController {
             };
 
             const midtransToken = await snap.createTransaction(parameter);
+            const updatedGem = user.gem + totalGem
             User.updateGem(userId, { gem: updatedGem });
 
             response.status(201).json(midtransToken);
@@ -218,30 +219,6 @@ class UserController {
             }
             const leaderBoard = await User.leaderBoard()
             res.status(200).json(leaderBoard)
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: "Internal server error" });
-        }
-    }
-
-    static async addGem(req, res) {
-        try {
-
-            const userId = req.user.id
-            const sus = req.body.sus;
-            if(sus){
-                throw { message: "Not Found"}
-            }
-            console.log(userId)
-            const { gem } = req.body
-            const user = User.findById(userId)
-            if(!gem){
-                throw {message: "Gem is required"}
-            }
-            await User.update(userId, {
-                gem: gem,
-            });
-            res.status(200).json({ message: "Succed update gem" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Internal server error" });

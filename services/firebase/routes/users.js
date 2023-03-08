@@ -25,7 +25,7 @@ cloudinary.config({
 router.get("/",UserController.getAllUsers)
 router.get('/leaderboard',UserController.leaderBoard);
 router.post("/register",UserController.registerUser)
-router.patch('/updateGem',authentication,UserController.addGem);
+// router.patch('/updateGem',authentication,UserController.addGem);
 router.post('/checkoutGem',authentication,UserController.checkout);
 router.put('/editProfile',auth, upload.single('image'), UserController.uploadImageUser);
 router.post("/login", UserController.loginUser)

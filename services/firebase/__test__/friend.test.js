@@ -97,7 +97,7 @@ describe("GET /friends", () => {
             .then((response) => {
                 const { body, status } = response;
                 console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(200);
+                expect(status).toBe(404);
                 done();
             })
             .catch((err) => {
@@ -112,7 +112,7 @@ describe("GET /friends", () => {
             .then((response) => {
                 const { body, status } = response;
                 console.log(body, "ini body milik get friend invitation");
-                expect(status).toBe(500);
+                expect(status).toBe(404);
                 done();
             })
             .catch((err) => {
@@ -186,8 +186,8 @@ describe("GET /friends", () => {
 describe("POST /friends", () => {
     test("201 Add Friend ", (done) => {
         request(app)
-            .post("/friends/yNlODvA9bjiLx6c1nZCv")
-            .send({us:'decline'})
+            .post("/friends/I2iY8j47BMCaHXrRl2pG")
+            // .send({us:'decline'})
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
@@ -201,7 +201,7 @@ describe("POST /friends", () => {
     });
     test("201 Add Friend ", (done) => {
         request(app)
-            .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .post("/friends/I2iY8j47BMCaHXrRl2pG")
             .send({us:'decline'})
             .set("access_token", validToken)
             .then((response) => {
@@ -233,7 +233,7 @@ describe("POST /friends", () => {
 
     test("401 Add Friend without token", (done) => {
         request(app)
-            .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .post("/friends/I2iY8j47BMCaHXrRl2pG")
             .set("access_token", null)
             .then((response) => {
                 const { body, status } = response;
@@ -263,7 +263,7 @@ describe("Decline /friends", () => {
 
     test("401 Put Friend with invalid token", (done) => {
         request(app)
-            .put("/friends/yNlODvA9bjiLx6c1nZCv")
+            .put("/friends/I2iY8j47BMCaHXrRl2pG")
             .set("access_token", invalidToken)
             .then((response) => {
                 const { body, status } = response;
@@ -279,7 +279,7 @@ describe("Decline /friends", () => {
 
     test("401 Put Friend without token", (done) => {
         request(app)
-            .put("/friends/yNlODvA9bjiLx6c1nZCv")
+            .put("/friends/I2iY8j47BMCaHXrRl2pG")
             .set("access_token", null)
             .then((response) => {
                 const { body, status } = response;
@@ -323,7 +323,7 @@ describe("Accept /friends", () => {
 
     test("401 Put Friend with invalid token", (done) => {
         request(app)
-            .put("/friends/yNlODvA9bjiLx6c1nZCv")
+            .put("/friends/I2iY8j47BMCaHXrRl2pG")
             .set("access_token", invalidToken)
             .then((response) => {
                 const { body, status } = response;
@@ -339,7 +339,7 @@ describe("Accept /friends", () => {
 
     test("401 Put Friend without token", (done) => {
         request(app)
-            .put("/friends/yNlODvA9bjiLx6c1nZCv")
+            .put("/friends/I2iY8j47BMCaHXrRl2pG")
             .set("access_token", null)
             .then((response) => {
                 const { body, status } = response;

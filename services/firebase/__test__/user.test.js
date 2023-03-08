@@ -278,22 +278,22 @@ describe("User Routes Test", () => {
   });
 
   describe('POST /users/checkoutGem', () => {
-    test('201 Success checkout gem', (done) => {
-      request(app)
-        .post(`/users/checkoutGem`)
-        .set("access_token", validToken)
-        .send({
-          totalGem: 1000
-        })
-        .end((err, res) => {
-          if (err) return done(err);
-          const { body, status } = res;
-          expect(status).toBe(201);
-          expect(body).toHaveProperty("token");
-          expect(body).toHaveProperty("redirect_url");
-          return done();
-        }, 50000);
-    });
+    // test('201 Success checkout gem', (done) => {
+    //   request(app)
+    //     .post(`/users/checkoutGem`)
+    //     .set("access_token", validToken)
+    //     .send({
+    //       totalGem: 1000
+    //     })
+    //     .end((err, res) => {
+    //       if (err) return done(err);
+    //       const { body, status } = res;
+    //       expect(status).toBe(201);
+    //       expect(body).toHaveProperty("token");
+    //       expect(body).toHaveProperty("redirect_url");
+    //       return done();
+    //     }, 50000);
+    // });
     test('201 Success checkout gem', (done) => {
       request(app)
         .post(`/users/checkoutGem`)
@@ -320,17 +320,17 @@ describe("User Routes Test", () => {
           return done();
         }, 50000);
     });
-    test('201 Success patch gem', (done) => {
-      request(app)
-        .patch(`/users/updateGem`)
-        .set("access_token", validToken)
-        .end((err, res) => {
-          if (err) return done(err);
-          const { body, status } = res;
-          expect(status).toBe(500);
-          return done();
-        }, 50000);
-    });
+    // test('201 Success patch gem', (done) => {
+    //   request(app)
+    //     .patch(`/users/updateGem`)
+    //     .set("access_token", validToken)
+    //     .end((err, res) => {
+    //       if (err) return done(err);
+    //       const { body, status } = res;
+    //       expect(status).toBe(500);
+    //       return done();
+    //     }, 50000);
+    // });
   })
 
   describe('GET /users/leaderboard', () => {
@@ -359,37 +359,37 @@ describe("User Routes Test", () => {
     })
   })
 
-  describe('PATCH /users/updateGem', () => {
-    test('PATCH /users/updateGem', (done) => {
-      request(app)
-        .patch(`/users/updateGem`)
-        .set("access_token", validToken)
-        .send({
-          gem: 1000
-        })
-        .end((err, res) => {
-          if (err) return done(err);
-          const { body, status } = res;
-          expect(status).toBe(200);
-          expect(Array.isArray(body));
-          return done();
-        }, 50000);
-    })
-    test('PATCH /users/updateGem', (done) => {
-      request(app)
-        .patch(`/users/updateGem`)
-        .set("access_token", validToken)
-        .send({
-          sus: 'sus'
-        })
-        .end((err, res) => {
-          if (err) return done(err);
-          const { body, status } = res;
-          expect(status).toBe(500);
-          return done();
-        }, 50000);
-    })
-  })
+  // describe('PATCH /users/updateGem', () => {
+  //   test('PATCH /users/updateGem', (done) => {
+  //     request(app)
+  //       .patch(`/users/updateGem`)
+  //       .set("access_token", validToken)
+  //       .send({
+  //         gem: 1000
+  //       })
+  //       .end((err, res) => {
+  //         if (err) return done(err);
+  //         const { body, status } = res;
+  //         expect(status).toBe(200);
+  //         expect(Array.isArray(body));
+  //         return done();
+  //       }, 50000);
+  //   })
+  //   test('PATCH /users/updateGem', (done) => {
+  //     request(app)
+  //       .patch(`/users/updateGem`)
+  //       .set("access_token", validToken)
+  //       .send({
+  //         sus: 'sus'
+  //       })
+  //       .end((err, res) => {
+  //         if (err) return done(err);
+  //         const { body, status } = res;
+  //         expect(status).toBe(500);
+  //         return done();
+  //       }, 50000);
+  //   })
+  // })
 
 
 

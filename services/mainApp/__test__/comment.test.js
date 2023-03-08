@@ -5,7 +5,7 @@ const { queryInterface } = sequelize;
 const { signToken } = require('../helpers/jwt');
 const { axios } = require('axios');
 
-let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVuR0xLSG1kTTlmdW93U3lRdTRVIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyNTkzMjR9.pVwSdAN2ML315pPxZxib_0kv5e2oBzNIIGRVG6S6UXI';
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImxnNnd4MlQyOHZtd053SHdsZFphIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyODA3MDZ9.iJF76HgqvgOt44jLD9u3bSNtTLA02wzc7u-ln6BWCJ4';
 let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
 
 afterAll((done) => {
@@ -25,7 +25,7 @@ describe("POST /Comments", () => {
             .set('access_token', access_token)
             .send({
                 PostId: 1,
-                UserId: "UnGLKHmdM9fuowSyQu4U",
+                UserId: "lg6wx2T28vmwNwHwldZa",
                 description: "ini berhasil di buat"
             })
             .then((response) => {
@@ -49,7 +49,7 @@ describe("POST /Comments", () => {
             .set('access_token', access_token)
             .send({
                 PostId: 1,
-                UserId: "UnGLKHmdM9fuowSyQu4U",
+                UserId: "lg6wx2T28vmwNwHwldZa",
                 description: null
             })
             .then((response) => {
@@ -168,7 +168,7 @@ describe("MOCKING", () => {
       const data = {
         PostId: 1,
         description: "ini berhasil di buat mock",
-        UserId: "UnGLKHmdM9fuowSyQu4U",
+        UserId: "lg6wx2T28vmwNwHwldZa",
         profileName: "Gilang",
       }
       const response = await request(app).post("/comments").set("access_token", access_token).send(data);
@@ -186,7 +186,7 @@ describe("MOCKING", () => {
       const data = {
         PostId: 1,
         description: "ini berhasil di buat mock",
-        UserId: "UnGLKHmdM9fuowSyQu4U",
+        UserId: "lg6wx2T28vmwNwHwldZa",
         profileName: "Gilang",
       }
       const response = await request(app).put("/comments/999").set("access_token", access_token).send(data);
