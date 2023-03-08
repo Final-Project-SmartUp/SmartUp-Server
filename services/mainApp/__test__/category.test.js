@@ -7,7 +7,7 @@ const { signToken } = require('../helpers/jwt');
 const { axios } = require('axios');
 
 
-let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTUxYm5aMlBraHhlOUQyVUZGIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgxNjMyNTN9.cyNrEweeaqVJmcwTGVQhrnkt-40ZgNz-V_3jxPetD9Q';
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVuR0xLSG1kTTlmdW93U3lRdTRVIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyNTgwOTV9.15iHZBdzOXpYc92Y83Y5L4Bf7jDxfm896Q2erZm-W-g';
 let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
 
 describe("GET /categories", () => {

@@ -28,8 +28,8 @@ class FriendController {
             const newFriend = await Friend.addFriend(payload);
             const newFriend2 = await Friend.addFriend(payload2)
             res.status(201).json({
-                payload,
-                payload2
+                id: newFriend._path.segments[1],
+                id2: newFriend2._path.segments[1]
             });
         } catch (err) {
             res.status(500).json(err);
@@ -45,6 +45,7 @@ class FriendController {
             const userId = req.user.id;
             const friends = await Friend.findAll(userId);
             const user = await User.findAll();
+            console.log(friends)
             const friend = friends.map(el => {
                 const result = user.find(({ id }) => id === el.userId)
                 return { name: result.username, isFriend: el.isFriend, status: el.status, id: el.id,image:result.image }
@@ -106,7 +107,7 @@ class FriendController {
                 throw { message: "Not Found"}
             }
             const data = await Friend.friendId(id)
-            console.log(data, 'INI DATA BROOo')
+            console.log(data, '<<<<<<<<<< ini DATA!!!!!')
              await Friend.acceptFriend(id,{
                     isFriend:true,
                     status:true
@@ -129,7 +130,7 @@ class FriendController {
             }
             console.log(id)
             const data = await Friend.friendId(id)
-            console.log(data)
+            console.log(data,"ini declineee!!")
              await Friend.acceptFriend(id,{
                     isFriend:false,
                     status:true

@@ -19,6 +19,7 @@ class CommentController {
             });
             response.status(201).json(comment);
         } catch (err) {
+            console.log(err,'ini dia error nya addcomment');
             next(err);
         }
     }

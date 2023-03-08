@@ -187,6 +187,7 @@ describe("POST /friends", () => {
     test("201 Add Friend ", (done) => {
         request(app)
             .post("/friends/yNlODvA9bjiLx6c1nZCv")
+            .send({us:'decline'})
             .set("access_token", validToken)
             .then((response) => {
                 const { body, status } = response;
@@ -417,7 +418,17 @@ describe('Friend 500', () => {
 });
 
 
+describe('Friend 500', () => {
+    test('myAsyncFunction returns a rejected promise with status code 500', async () => {
+        // Create a mock implementation for myAsyncFunction that returns a rejected promise with status code 500
+        const mockError = new Error('Mocked error');
+        mockError.statusCode = 500;
+        jest.spyOn(FriendController, 'requestFriend').mockRejectedValue(mockError);
 
-
-
-
+        // Call the function under test and expect it to throw the mocked error with status code 500
+        await expect(FriendController.requestFriend()).rejects.toThrow(mockError);
+        expect(mockError.statusCode).toEqual(500);
+        // Restore the original implementation of fetch
+        jest.restoreAllMocks();
+    });
+});

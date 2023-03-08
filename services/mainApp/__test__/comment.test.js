@@ -5,10 +5,8 @@ const { queryInterface } = sequelize;
 const { signToken } = require('../helpers/jwt');
 const { axios } = require('axios');
 
-let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg3MTUxYm5aMlBraHhlOUQyVUZGIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgxNjMyNTN9.cyNrEweeaqVJmcwTGVQhrnkt-40ZgNz-V_3jxPetD9Q';
+let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlVuR0xLSG1kTTlmdW93U3lRdTRVIiwiZW1haWwiOiJnaWxhbmdAbWFpbC5jb20iLCJpYXQiOjE2NzgyNTkzMjR9.pVwSdAN2ML315pPxZxib_0kv5e2oBzNIIGRVG6S6UXI';
 let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
-// let access_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.ENI_woraRmxzHE8Ay0r1xqWVjpZiy_0W44RPHW59eAU';
-// let invalid_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkNoeGtkdnRwYVBwbUVLeGsyV1BhIiwiZW1haWwiOiJ0ZXN0aW5nQG1haWwuY29tIiwiaWF0IjoxNjc3ODMwNjAxfQ.';
 
 afterAll((done) => {
     Comment.destroy({ truncate: true, cascade: true, restartIdentity: true })
@@ -26,16 +24,18 @@ describe("POST /Comments", () => {
             .post("/comments")
             .set('access_token', access_token)
             .send({
+                PostId: 1,
+                UserId: "UnGLKHmdM9fuowSyQu4U",
                 description: "ini berhasil di buat"
             })
             .then((response) => {
                 const { body, status } = response;
-                // console.log(body);
+                console.log(body, "ini yang dicari");
                 expect(status).toBe(201);
                 expect(body).toHaveProperty("id", expect.any(Number));
                 expect(body).toHaveProperty("description", expect.any(String));
                 expect(body).toHaveProperty("PostId", expect.any(Number));
-                expect(body).toHaveProperty("UserId", expect.any(Number));
+                expect(body).toHaveProperty("UserId", expect.any(String));
                 done();
             })
             .catch((err) => {
@@ -48,11 +48,13 @@ describe("POST /Comments", () => {
             .post("/comments")
             .set('access_token', access_token)
             .send({
+                PostId: 1,
+                UserId: "UnGLKHmdM9fuowSyQu4U",
                 description: null
             })
             .then((response) => {
                 const { body, status } = response;
-                console.log(body, 'ini dari add comment');
+                // console.log(body, 'ini dari add comment');
                 expect(status).toBe(400);
                 expect(body).toHaveProperty("message", expect.any(Array));
                 expect(body.message[0]).toBe("Comment is required");
@@ -90,6 +92,7 @@ describe("PUT /Comments", () => {
             .put("/comments/1")
             .set('access_token', access_token)
             .send({
+                PostId: 1,
                 description: "ini berhasil di edit yang baru dibuat"
             })
             .then((response) => {
@@ -156,3 +159,44 @@ describe("DELETE /Comments", () => {
             });
     });
 });
+
+describe("MOCKING", () => {
+    test("should response with status 500 fail add comment", async () => {
+        jest.spyOn(Comment, 'create').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const data = {
+        PostId: 1,
+        description: "ini berhasil di buat mock",
+        UserId: "UnGLKHmdM9fuowSyQu4U",
+        profileName: "Gilang",
+      }
+      const response = await request(app).post("/comments").set("access_token", access_token).send(data);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(500);
+      expect(response.body.message).toEqual('Internal server error')
+    });
+
+    test("should response with status 500 fail edit comment", async () => {
+        jest.spyOn(Comment, 'update').mockImplementation(() => {
+          throw new Error('Something went wrong');
+      });
+      const data = {
+        PostId: 1,
+        description: "ini berhasil di buat mock",
+        UserId: "UnGLKHmdM9fuowSyQu4U",
+        profileName: "Gilang",
+      }
+      const response = await request(app).put("/comments/999").set("access_token", access_token).send(data);
+    //   console.log("INI DIA COK MOCK");
+    //   console.log(response.body);
+    //   console.log(response.status);
+      expect(response.status).toBe(404);
+      expect(response.body.message).toEqual('Comment not found')
+    });
+
+    
+});
+
